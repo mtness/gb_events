@@ -232,7 +232,7 @@ class EventRepository extends Repository
      * @param \DateTime $startDate
      * @param \DateTime $stopDate
      * @param bool $checkDuration
-     * @param integer $limit
+     * @param int $limit
      * @return array
      */
     protected function resolveRecurringEvents(
@@ -284,9 +284,9 @@ class EventRepository extends Repository
      * Check if the event is active at the given point in time
      *
      * @param \DateTime $eventDate
-     * @param integer $duration
+     * @param int $duration
      * @param \DateTime $currentDate
-     * @return boolean
+     * @return bool
      */
     protected function isVisibleEvent(\DateTime $eventDate, $duration = 0, \DateTime $currentDate = null)
     {
