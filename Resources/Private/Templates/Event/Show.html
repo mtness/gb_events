@@ -20,7 +20,7 @@
           <dd>{event.title}</dd>
 
           <dt>{f:translate(key: 'tx_gbevents_domain_model_event.description')}</dt>
-          <dd>{event.description}</dd>
+          <dd>{event.description -> f:format.html()}</dd>
 
           <dt>{f:translate(key: 'tx_gbevents_domain_model_event.location')}</dt>
           <dd>{event.location}</dd>
