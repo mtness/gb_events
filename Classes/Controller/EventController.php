@@ -26,7 +26,7 @@ namespace GuteBotschafter\GbEvents\Controller;
  ***************************************************************/
 
 use GuteBotschafter\GbEvents\Domain\Model\Event;
-use \TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Controller for the Event object
