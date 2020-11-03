@@ -31,9 +31,9 @@ use TYPO3\CMS\Install\Updates\AbstractUpdate;
 
 class FalUpdateWizard extends AbstractUpdate
 {
-    const UPLOADS_FOLDER = "uploads/tx_gbevents/";
-    const FAL_FOLDER_IMAGES = "_migrated/gbevents_images";
-    const FAL_FOLDER_DOWNLOADS = "_migrated/gbevents_downloads";
+    const UPLOADS_FOLDER = 'uploads/tx_gbevents/';
+    const FAL_FOLDER_IMAGES = '_migrated/gbevents_images';
+    const FAL_FOLDER_DOWNLOADS = '_migrated/gbevents_downloads';
 
     /**
      * @var string
@@ -102,7 +102,7 @@ class FalUpdateWizard extends AbstractUpdate
      * Checks if an update is needed
      *
      * @param string &$description : The description for the update
-     * @return boolean TRUE if an update is needed, FALSE otherwise
+     * @return bool TRUE if an update is needed, FALSE otherwise
      */
     public function checkForUpdate(&$description)
     {
@@ -149,7 +149,7 @@ class FalUpdateWizard extends AbstractUpdate
      *
      * @param array &$dbQueries Queries done in this update
      * @param mixed &$customMessages Custom messages
-     * @return boolean TRUE on success, FALSE on error
+     * @return bool TRUE on success, FALSE on error
      */
     public function performUpdate(array &$dbQueries, &$customMessages)
     {

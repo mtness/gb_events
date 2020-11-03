@@ -25,13 +25,13 @@ namespace GuteBotschafter\GbEvents\Domain\Model;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use TYPO3\CMS\Core\Resource\FileReference;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
-use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
-use TYPO3\CMS\Core\Resource\FileReference;
 
 /**
  * A single event
@@ -124,14 +124,14 @@ class Event extends AbstractEntity implements EventInterface
     /**
      * The weeks of the month the event should occur at
      *
-     * @var integer
+     * @var int
      */
     protected $recurringWeeks;
 
     /**
      * The days of the week the event should occur at
      *
-     * @var integer
+     * @var int
      */
     protected $recurringDays;
 
@@ -152,7 +152,7 @@ class Event extends AbstractEntity implements EventInterface
     /**
      * Exclude national holidays from the recurring events list
      *
-     * @var boolean
+     * @var bool
      */
     protected $recurringExcludeHolidays;
 
@@ -537,7 +537,7 @@ class Event extends AbstractEntity implements EventInterface
     }
 
     /**
-     * @param integer $recurringWeeks
+     * @param int $recurringWeeks
      * @return void
      */
     public function setRecurringWeeks($recurringWeeks)
@@ -546,7 +546,7 @@ class Event extends AbstractEntity implements EventInterface
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getRecurringWeeks()
     {
@@ -582,7 +582,7 @@ class Event extends AbstractEntity implements EventInterface
     }
 
     /**
-     * @param integer $recurringDays
+     * @param int $recurringDays
      * @return void
      */
     public function setRecurringDays($recurringDays)
@@ -591,7 +591,7 @@ class Event extends AbstractEntity implements EventInterface
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getRecurringDays()
     {
@@ -616,7 +616,7 @@ class Event extends AbstractEntity implements EventInterface
     }
 
     /**
-     * @param boolean $recurringExcludeHolidays
+     * @param bool $recurringExcludeHolidays
      * @return void
      */
     public function setRecurringExcludeHolidays($recurringExcludeHolidays)
@@ -625,7 +625,7 @@ class Event extends AbstractEntity implements EventInterface
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getRecurringExcludeHolidays()
     {
@@ -656,7 +656,7 @@ class Event extends AbstractEntity implements EventInterface
     /**
      * Is it a one-day event?
      *
-     * @return boolean
+     * @return bool
      */
     public function getIsOneDayEvent()
     {
@@ -726,8 +726,8 @@ class Event extends AbstractEntity implements EventInterface
         $text = html_entity_decode(strip_tags($textInput), ENT_COMPAT | ENT_HTML401, 'UTF-8');
 
         return str_replace(
-            ["\"", "\\", ",", ":", ";", "\n"],
-            ["DQUOTE", "\\\\", "\,", "\":\"", "\;", "\\n"],
+            ['"', '\\', ',', ':', ';', "\n"],
+            ['DQUOTE', '\\\\', "\,", '":"', "\;", '\\n'],
             $text
         );
     }
@@ -857,7 +857,7 @@ class Event extends AbstractEntity implements EventInterface
                     $byDays[] = sprintf('%s%s', $week, $day);
                 }
             }
-            $rRule .= join(",", $byDays);
+            $rRule .= join(',', $byDays);
         } else {
             $rRule = 'FREQ=WEEKLY;BYDAY=';
             $byDays = [];
@@ -905,7 +905,7 @@ class Event extends AbstractEntity implements EventInterface
      * Check if the given date is to be excluded from the list of recurring events
      *
      * @param  \DateTime $date
-     * @return boolean
+     * @return bool
      */
     protected function isExcludedDate(\DateTime $date)
     {
@@ -967,7 +967,7 @@ class Event extends AbstractEntity implements EventInterface
     /**
      * Return the duration in seconds for an event
      *
-     * @return integer $duration
+     * @return int $duration
      */
     public function getDuration()
     {

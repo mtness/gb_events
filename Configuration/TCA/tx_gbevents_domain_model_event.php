@@ -1,7 +1,17 @@
 <?php
+
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+
 if (!defined('TYPO3_MODE')) {
     die('Access denied.');
 }
+
+ExtensionManagementUtility::makeCategorizable(
+    'gb_events',
+    'tx_gbevents_domain_model_event',
+    'categories',
+    []
+);
 
 return [
     'ctrl' => [
@@ -10,8 +20,7 @@ return [
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
         'dividers2tabs' => true,
-        'versioningWS' => 2,
-        'versioning_followPages' => true,
+        'versioningWS' => true,
         'origUid' => 't3_origuid',
         'languageField' => 'sys_language_uid',
         'transOrigPointerField' => 'l10n_parent',
@@ -23,13 +32,14 @@ return [
             'endtime' => 'endtime',
         ],
         'iconfile' => 'EXT:gb_events/Resources/Public/Icons/tx_gbevents_domain_model_event.gif',
+        'searchFields' => 'title,teaser,description,location'
     ],
     'interface' => [
         'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, title, teaser, description, location, event_date, event_time, event_stop_date, images, downloads, recurring_weeks, recurring_days, recurring_stop, recurring_exclude_holidays, recurring_exclude_dates',
     ],
     'types' => [
         '1' => [
-            'showitem' => 'sys_language_uid,l10n_parent,l10n_diffsource,hidden,--palette--;;1,title,teaser,description,location,event_date,event_time,event_stop_date,images,downloads,--div--;LLL:EXT:gb_events/Resources/Private/Language/locallang_db.xlf:tx_gbevents_domain_model_event.recurring,recurring_weeks,recurring_days,recurring_stop,recurring_exclude_holidays,recurring_exclude_dates,--div--;LLL:EXT:cms/locallang_ttc.xml:tabs.access,starttime,endtime',
+            'showitem' => 'sys_language_uid,l10n_parent,l10n_diffsource,hidden,--palette--;;1,title,teaser,description,location,event_date,event_time,event_stop_date,images,downloads,--div--;LLL:EXT:gb_events/Resources/Private/Language/locallang_db.xlf:tx_gbevents_domain_model_event.recurring,recurring_weeks,recurring_days,recurring_stop,recurring_exclude_holidays,recurring_exclude_dates,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xml:tabs.access,starttime,endtime',
         ],
     ],
     'palettes' => [
@@ -40,20 +50,15 @@ return [
     'columns' => [
         'sys_language_uid' => [
             'exclude' => 1,
-            'label' => 'LLL:EXT:lang/locallang_general.php:LGL.language',
+            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.language',
             'config' => [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
-                'foreign_table' => 'sys_language',
-                'foreign_table_where' => 'ORDER BY sys_language.title',
+                'special' => 'languages',
                 'items' => [
                     [
-                        'LLL:EXT:lang/locallang_general.php:LGL.allLanguages',
+                        'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.allLanguages',
                         -1,
-                    ],
-                    [
-                        'LLL:EXT:lang/locallang_general.php:LGL.default_value',
-                        0,
                     ],
                 ],
             ],
@@ -61,18 +66,16 @@ return [
         'l10n_parent' => [
             'displayCond' => 'FIELD:sys_language_uid:>:0',
             'exclude' => 1,
-            'label' => 'LLL:EXT:lang/locallang_general.php:LGL.l18n_parent',
+            'label' => 'LLL:EXT:core/Resources/Private/Language/Resources/Private/Language/locallang_general.xlf:LGL.l18n_parent',
             'config' => [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
                 'items' => [
-                    [
-                        '',
-                        0,
-                    ],
+                    ['', 0],
                 ],
                 'foreign_table' => 'tx_gbevents_domain_model_event',
                 'foreign_table_where' => 'AND tx_gbevents_domain_model_event.pid=###CURRENT_PID### AND tx_gbevents_domain_model_event.sys_language_uid IN (-1,0)',
+                'default' => 0,
             ],
         ],
         'l10n_diffsource' => [
@@ -82,7 +85,7 @@ return [
         ],
         't3ver_label' => [
             'displayCond' => 'FIELD:t3ver_label:REQ:true',
-            'label' => 'LLL:EXT:lang/locallang_general.php:LGL.versionLabel',
+            'label' => 'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.versionLabel',
             'config' => [
                 'type' => 'none',
                 'cols' => 27,
@@ -90,38 +93,42 @@ return [
         ],
         'hidden' => [
             'exclude' => 1,
-            'label' => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
+            'label' => 'LLL:EXT:core/Resources/Private/Language/Resources/Private/Language/locallang_general.xlf:LGL.hidden',
             'config' => [
                 'type' => 'check',
             ],
         ],
         'starttime' => [
             'exclude' => 1,
-            'l10n_mode' => 'mergeIfNotBlank',
-            'label' => 'LLL:EXT:lang/locallang_general.php:LGL.starttime',
+            'label' => 'LLL:EXT:core/Resources/Private/Language/Resources/Private/Language/locallang_general.xlf:LGL.starttime',
             'config' => [
                 'type' => 'input',
+                'renderType' => 'inputDateTime',
                 'size' => '10',
-                'max' => '20',
                 'eval' => 'datetime',
                 'checkbox' => '0',
                 'default' => '0',
+                'behaviour' => [
+                    'allowLanguageSynchronization' => true,
+                ],
             ],
         ],
         'endtime' => [
             'exclude' => 1,
-            'l10n_mode' => 'mergeIfNotBlank',
-            'label' => 'LLL:EXT:lang/locallang_general.php:LGL.endtime',
+            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.endtime',
             'config' => [
                 'type' => 'input',
+                'renderType' => 'inputDateTime',
                 'size' => '8',
-                'max' => '20',
                 'eval' => 'datetime',
                 'checkbox' => '0',
                 'default' => '0',
                 'range' => [
                     'upper' => mktime(0, 0, 0, 12, 31, date('Y') + 10),
                     'lower' => mktime(0, 0, 0, date('m') - 1, date('d'), date('Y')),
+                ],
+                'behaviour' => [
+                    'allowLanguageSynchronization' => true,
                 ],
             ],
         ],
@@ -152,8 +159,8 @@ return [
                 'cols' => 40,
                 'rows' => 15,
                 'eval' => 'trim,required',
+                'enableRichtext' => true,
             ],
-            'defaultExtras' => 'richtext[]:rte_transform[mode=ts_css]'
         ],
         'location' => [
             'exclude' => 0,
@@ -169,8 +176,8 @@ return [
             'label' => 'LLL:EXT:gb_events/Resources/Private/Language/locallang_db.xlf:tx_gbevents_domain_model_event.event_date',
             'config' => [
                 'type' => 'input',
+                'renderType' => 'inputDateTime',
                 'size' => 12,
-                'max' => 20,
                 'eval' => 'date,required',
                 'checkbox' => 1,
             ],
@@ -189,9 +196,9 @@ return [
             'label' => 'LLL:EXT:gb_events/Resources/Private/Language/locallang_db.xlf:tx_gbevents_domain_model_event.event_stop_date',
             'config' => [
                 'type' => 'input',
+                'renderType' => 'inputDateTime',
                 'size' => 12,
-                'max' => 20,
-                'eval' => 'date',
+                'eval' => 'date,int',
                 'checkbox' => 1,
             ],
         ],
@@ -272,9 +279,9 @@ return [
             'label' => 'LLL:EXT:gb_events/Resources/Private/Language/locallang_db.xlf:tx_gbevents_domain_model_event.recurring_stop',
             'config' => [
                 'type' => 'input',
+                'renderType' => 'inputDateTime',
                 'size' => 12,
-                'max' => 20,
-                'eval' => 'datetime',
+                'eval' => 'datetime,int',
                 'checkbox' => 1,
             ],
         ],
@@ -299,12 +306,12 @@ return [
         'images' => [
             'exclude' => 0,
             'label' => 'LLL:EXT:gb_events/Resources/Private/Language/locallang_db.xlf:tx_gbevents_domain_model_event.images',
-            'config' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getFileFieldTCAConfig("images"),
+            'config' => ExtensionManagementUtility::getFileFieldTCAConfig('images'),
         ],
         'downloads' => [
             'exclude' => 0,
             'label' => 'LLL:EXT:gb_events/Resources/Private/Language/locallang_db.xlf:tx_gbevents_domain_model_event.downloads',
-            'config' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getFileFieldTCAConfig("downloads"),
+            'config' => ExtensionManagementUtility::getFileFieldTCAConfig('downloads'),
         ],
     ],
 ];

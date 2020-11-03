@@ -25,7 +25,6 @@ namespace GuteBotschafter\GbEvents\Hooks;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use TYPO3\CMS\Backend\Form\FormEngine;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\ArrayUtility;
 
@@ -64,7 +63,7 @@ class EventIndexer
     /**
      * Indexed events
      *
-     * @var integer
+     * @var int
      */
     protected $eventCount = 0;
 

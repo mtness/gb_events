@@ -40,7 +40,7 @@ class ExportController extends BaseController
     /**
      * Postfix for iCalendar files
      */
-    const VCALENDAR_END = "END:VCALENDAR";
+    const VCALENDAR_END = 'END:VCALENDAR';
 
     /**
      * Displays all Events
