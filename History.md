@@ -1,3 +1,8 @@
+8.0.0 / 2020-11-03
+==================
+
+  * [!!!][FEATURE] Add TYPO3 9.x compatibility
+  * [!!!][FEATURE] Drop TYPO3 6.x and 7.x compatibility
 
 7.0.1 / 2016-01-20
 ==================
