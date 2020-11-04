@@ -18,7 +18,7 @@ $EM_CONF[$_EXTKEY] = [
     ],
     'autoload' => [
         'psr-4' => [
-            'GuteBotschafter\\GbEvents\\' => 'Classes',
+            'In2code\\GbEvents\\' => 'Classes',
         ],
     ]
 ];

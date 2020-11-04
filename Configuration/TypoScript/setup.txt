@@ -17,11 +17,6 @@ plugin.tx_gbevents {
     storagePid = {$plugin.tx_gbevents.persistence.storagePid}
   }
 
-  # objects {
-  #   GuteBotschafter\GbEvents\Domain\Model\Event {
-  #    className = GuteBotschafter\GbEvents\Domain\Model\FullEvent
-  #   }
-  # }
   settings {
     forceExcludeHolidays = 0
     holidays {
