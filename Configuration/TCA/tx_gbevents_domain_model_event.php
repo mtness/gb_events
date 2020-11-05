@@ -39,7 +39,7 @@ return [
     ],
     'types' => [
         '1' => [
-            'showitem' => 'sys_language_uid,l10n_parent,l10n_diffsource,hidden,--palette--;;1,title,teaser,description,location,event_date,event_time,event_stop_date,images,downloads,--div--;LLL:EXT:gb_events/Resources/Private/Language/locallang_db.xlf:tx_gbevents_domain_model_event.recurring,recurring_weeks,recurring_days,recurring_stop,recurring_exclude_holidays,recurring_exclude_dates,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xml:tabs.access,starttime,endtime',
+            'showitem' => 'sys_language_uid,l10n_parent,l10n_diffsource,hidden,--palette--;;1,title,path_segment,teaser,description,location,event_date,event_time,event_stop_date,images,downloads,--div--;LLL:EXT:gb_events/Resources/Private/Language/locallang_db.xlf:tx_gbevents_domain_model_event.recurring,recurring_weeks,recurring_days,recurring_stop,recurring_exclude_holidays,recurring_exclude_dates,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xml:tabs.access,starttime,endtime',
         ],
     ],
     'palettes' => [
@@ -140,6 +140,24 @@ return [
                 'size' => 30,
                 'eval' => 'trim,required',
             ],
+        ],
+        'path_segment' => [
+            'exclude' => true,
+            'label' => 'LLL:EXT:gb_events/Resources/Private/Language/locallang_db.xlf:tx_gbevents_domain_model_event.path_segment',
+            'config' => [
+                'type' => 'slug',
+                'generatorOptions' => [
+                    'fields' => ['title'],
+                    'fieldSeparator' => '/',
+                    'prefixParentPageSlug' => false,
+                    'replacements' => [
+                        '/' => '',
+                    ],
+                ],
+                'fallbackCharacter' => '-',
+                'eval' => 'uniqueInSite',
+                'default' => ''
+            ]
         ],
         'teaser' => [
             'exclude' => 0,

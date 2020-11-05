@@ -22,6 +22,9 @@ if (!defined('TYPO3_MODE')) {
     ]
 );
 
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/install']['update']['eventSlug']
+    = \In2code\GbEvents\Updates\EventSlugUpdater::class;
+
 // ke_search indexer
 if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('ke_search')) {
     $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['registerIndexerConfiguration'][] =
