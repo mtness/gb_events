@@ -9,7 +9,7 @@
 		"calendar",
 		"locations"
 	],
-	"version": "8.0.0-dev",
+	"version": "9.0.0-dev",
 	"minimum-stability": "stable",
 	"license": "GPL-2.0-or-later",
 	"homepage": "https://in2code.de",
@@ -28,6 +28,11 @@
 	"autoload": {
 		"psr-4": {
 			"In2code\\GbEvents\\": "Classes"
+		}
+	},
+	"extra": {
+		"typo3/cms": {
+			"extension-key": "gb_events"
 		}
 	}
 }
