@@ -187,13 +187,6 @@ interface EventInterface
     public function getEventStopDate();
 
     /**
-     * Is it a one-day event?
-     *
-     * @return bool
-     */
-    public function getIsOneDayEvent();
-
-    /**
      * Returns a unique identifier
      *
      * @return string

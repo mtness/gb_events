@@ -6,6 +6,8 @@ if (!defined('TYPO3_MODE')) {
     die('Access denied.');
 }
 
+$ll = 'LLL:EXT:gb_events/Resources/Private/Language/locallang_db.xlf:';
+
 ExtensionManagementUtility::makeCategorizable(
     'gb_events',
     'tx_gbevents_domain_model_event',
@@ -35,16 +37,16 @@ return [
         'searchFields' => 'title,teaser,description,location'
     ],
     'interface' => [
-        'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, title, teaser, description, location, event_date, event_time, event_stop_date, images, downloads, recurring_weeks, recurring_days, recurring_stop, recurring_exclude_holidays, recurring_exclude_dates',
+        'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, title, teaser, description, location, event_time, event_date, event_stop_date, images, downloads, recurring_weeks, recurring_days, recurring_stop, recurring_exclude_holidays, recurring_exclude_dates',
     ],
     'types' => [
         '1' => [
-            'showitem' => 'sys_language_uid,l10n_parent,l10n_diffsource,hidden,--palette--;;1,title,path_segment,teaser,description,location,event_date,event_time,event_stop_date,images,downloads,--div--;LLL:EXT:gb_events/Resources/Private/Language/locallang_db.xlf:tx_gbevents_domain_model_event.recurring,recurring_weeks,recurring_days,recurring_stop,recurring_exclude_holidays,recurring_exclude_dates,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xml:tabs.access,starttime,endtime',
+            'showitem' => 'sys_language_uid,l10n_parent,l10n_diffsource,hidden,--palette--;;1,title,path_segment,teaser,description,location,event_time,--palette--;' . $ll . 'palette.date;date,images,downloads,--div--;LLL:EXT:gb_events/Resources/Private/Language/locallang_db.xlf:tx_gbevents_domain_model_event.recurring,recurring_weeks,recurring_days,recurring_stop,recurring_exclude_holidays,recurring_exclude_dates,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xml:tabs.access,starttime,endtime',
         ],
     ],
     'palettes' => [
-        '1' => [
-            'showitem' => '',
+        'date' => [
+            'showitem' => 'event_date,event_stop_date',
         ],
     ],
     'columns' => [
@@ -196,7 +198,7 @@ return [
                 'type' => 'input',
                 'renderType' => 'inputDateTime',
                 'size' => 12,
-                'eval' => 'date,required',
+                'eval' => 'datetime,required',
                 'checkbox' => 1,
             ],
         ],
@@ -216,7 +218,7 @@ return [
                 'type' => 'input',
                 'renderType' => 'inputDateTime',
                 'size' => 12,
-                'eval' => 'date,int',
+                'eval' => 'datetime,required',
                 'checkbox' => 1,
             ],
         ],

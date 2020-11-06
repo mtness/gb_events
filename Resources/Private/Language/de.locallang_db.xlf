@@ -90,8 +90,8 @@
 				<target>Datum (Start der Veranstaltung)</target>
 			</trans-unit>
 			<trans-unit id="tx_gbevents_domain_model_event.event_time">
-				<source>Event Time</source>
-				<target>Uhrzeit</target>
+				<source>Event Time (only for frontend rendering)</source>
+				<target>Uhrzeit (nur für Ausgabe im Frontend)</target>
 			</trans-unit>
 			<trans-unit id="tx_gbevents_domain_model_event.event_stop_date">
 				<source>Event date (end)</source>
@@ -189,6 +189,10 @@
 			<trans-unit id="tx_gbevents_domain_model_event.path_segment">
 				<source>Speaking URL path segment</source>
 				<target state="translated">Sprechende URL Pfadabschnitt</target>
+			</trans-unit>
+			<trans-unit id="palette.date">
+				<source>Event date</source>
+				<target state="translated">Veranstaltungszeitraum</target>
 			</trans-unit>
 		</body>
 	</file>

@@ -69,7 +69,7 @@
 				<source>Event Date</source>
 			</trans-unit>
 			<trans-unit id="tx_gbevents_domain_model_event.event_time">
-				<source>Event Time</source>
+				<source>Event Time (only for frontend rendering)</source>
 			</trans-unit>
 			<trans-unit id="tx_gbevents_domain_model_event.event_stop_date">
 				<source>Event date (end)</source>
@@ -142,6 +142,9 @@
 			</trans-unit>
 			<trans-unit id="tx_gbevents_domain_model_event.path_segment">
 				<source>Speaking URL path segment</source>
+			</trans-unit>
+			<trans-unit id="palette.date">
+				<source>Event date</source>
 			</trans-unit>
 		</body>
 	</file>
