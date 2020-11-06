@@ -9,7 +9,7 @@
 		"calendar",
 		"locations"
 	],
-	"version": "9.0.0-dev",
+	"version": "9.0.0",
 	"minimum-stability": "stable",
 	"license": "GPL-2.0-or-later",
 	"homepage": "https://in2code.de",
