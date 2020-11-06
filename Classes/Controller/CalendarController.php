@@ -61,6 +61,7 @@ class CalendarController extends BaseController
             false,
             $this->settings['categories']
         );
+
         foreach ($events as $eventDay => $eventsThisDay) {
             $days[$eventDay]['events'] = $eventsThisDay['events'];
         }

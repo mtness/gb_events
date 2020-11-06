@@ -903,9 +903,13 @@ class Event extends AbstractEntity implements EventInterface
      *
      * @return bool
      */
-    protected function isRecurringEvent()
+    public function isRecurringEvent()
     {
-        return $this->recurringDays || $this->recurringWeeks;
+        if ($this->getRecurringDays() || $this->getRecurringWeeks()) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
