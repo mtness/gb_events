@@ -1,31 +1,8 @@
 <?php
-namespace GuteBotschafter\GbEvents\Domain\Repository;
 
-/***************************************************************
- *  Copyright notice
- *
- *  (c) 2011-2015 Morton Jonuschat <m.jonuschat@gute-botschafter.de>, Gute Botschafter GmbH
- *
- *  All rights reserved
- *
- *  This script is part of the TYPO3 project. The TYPO3 project is
- *  free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  The GNU General Public License can be found at
- *  http://www.gnu.org/copyleft/gpl.html.
- *
- *  This script is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  This copyright notice MUST APPEAR in all copies of the script!
- ***************************************************************/
+namespace In2code\GbEvents\Domain\Repository;
 
-use GuteBotschafter\GbEvents\Domain\Model\Event;
+use In2code\GbEvents\Domain\Model\Event;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\Qom\AndInterface;
 use TYPO3\CMS\Extbase\Persistence\Generic\Qom\ConstraintInterface;
@@ -35,7 +12,7 @@ use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 use TYPO3\CMS\Extbase\Persistence\Repository;
 
 /**
- * Repository for GuteBotschafter\GbEvents\Domain\Model\Event
+ * Repository for In2code\GbEvents\Domain\Model\Event
  */
 class EventRepository extends Repository
 {
@@ -149,14 +126,17 @@ class EventRepository extends Repository
         $conditions = $query->greaterThanOrEqual('event_date', $startDate);
         $this->applyRecurringConditions($query, $conditions, $startDate, $stopDate, $categories);
         $events = array_filter(
-            $this->resolveRecurringEvents($query->execute(), $grouped = false, $startDate, $stopDate, true),
+            $this->resolveRecurringEvents($query->execute(), $grouped = false, $startDate, $stopDate, true, 0, true),
             function (Event $event) use (&$cutOffDate, &$stopDate) {
                 return $event->getEventDate() >= $cutOffDate && $event->getEventDate() <= $stopDate;
             }
         );
-        usort($events, function (Event $a, Event $b) {
-            return strcmp($a->getEventDate()->getTimestamp(), $b->getEventDate()->getTimestamp());
-        });
+        usort(
+            $events,
+            function (Event $a, Event $b) {
+                return strcmp($a->getEventDate()->getTimestamp(), $b->getEventDate()->getTimestamp());
+            }
+        );
 
         return array_reverse($events);
     }
@@ -233,6 +213,7 @@ class EventRepository extends Repository
      * @param \DateTime $stopDate
      * @param bool $checkDuration
      * @param int $limit
+     * @param bool $archive
      * @return array
      */
     protected function resolveRecurringEvents(
@@ -241,32 +222,63 @@ class EventRepository extends Repository
         \DateTime $startDate,
         \DateTime $stopDate,
         $checkDuration = false,
-        $limit = 0
+        $limit = 0,
+        $archive = false
     ) {
         $today = new \DateTime('midnight today');
         $days = [];
+
         foreach ($events as $event) {
-            foreach ($event->getEventDates($startDate, $stopDate, $grouped) as $eventDate) {
-                /** @var \DateTime $eventDate */
-                if ($grouped === false) {
-                    if ($checkDuration === false && !$this->isVisibleEvent($eventDate)) {
-                        continue;
-                    }
-                    if ($checkDuration === true && !$this->isVisibleEvent($eventDate, $event->getDuration())) {
-                        continue;
-                    }
-                } else {
-                    if (!$this->isVisibleEvent($eventDate, 0, $startDate)) {
-                        continue;
-                    }
-                }
-                $recurringEvent = clone($event);
-                $recurringEvent->setEventDate($eventDate);
-                if ($grouped) {
-                    $days[$eventDate->format('Y-m-d')]['events'][$event->getUid()] = $recurringEvent;
-                } else {
-                    if ($recurringEvent->getEventStopDate() >= $today) {
-                        $days[$eventDate->format('Y-m-d') . '_' . $event->getUniqueIdentifier()] = $recurringEvent;
+            if ($event->isRecurringEvent()) {
+                foreach ($event->getEventDates($startDate, $stopDate, $grouped) as $eventDate) {
+                    if ($archive) {
+                        if ($grouped === false) {
+                            if ($checkDuration === false && !$this->isEventInPast($eventDate)) {
+                                continue;
+                            }
+                            if ($checkDuration === true && !$this->isEventInPast($eventDate, $event->getDuration())) {
+                                continue;
+                            }
+                        } else {
+                            if (!$this->isEventInPast($eventDate, 0, $startDate)) {
+                                continue;
+                            }
+                        }
+                        $recurringEvent = clone($event);
+                        $recurringEvent->setEventDate($eventDate);
+
+                        if ($grouped) {
+                            $days[$eventDate->format('Y-m-d')]['events'][$event->getUid()] = $recurringEvent;
+                        } else {
+                            if ($recurringEvent->getEventStopDate() <= $today) {
+                                $days[$eventDate->format('Y-m-d') . '_' . $event->getUniqueIdentifier()] =
+                                    $recurringEvent;
+                            }
+                        }
+                    } else {
+                        if ($grouped === false) {
+                            if ($checkDuration === false && !$this->isVisibleEvent($eventDate)) {
+                                continue;
+                            }
+                            if ($checkDuration === true && !$this->isVisibleEvent($eventDate, $event->getDuration())) {
+                                continue;
+                            }
+                        } else {
+                            if (!$this->isVisibleEvent($eventDate, 0, $startDate)) {
+                                continue;
+                            }
+                        }
+                        $recurringEvent = clone($event);
+                        $recurringEvent->setEventDate($eventDate);
+
+                        if ($grouped) {
+                            $days[$eventDate->format('Y-m-d')]['events'][$event->getUid()] = $recurringEvent;
+                        } else {
+                            if ($recurringEvent->getEventStopDate() >= $today) {
+                                $days[$eventDate->format('Y-m-d') . '_' . $event->getUniqueIdentifier()] =
+                                    $recurringEvent;
+                            }
+                        }
                     }
                 }
             }
@@ -293,8 +305,26 @@ class EventRepository extends Repository
         if (is_null($currentDate)) {
             $currentDate = new \DateTime('midnight');
         }
-
         return ($eventDate->getTimestamp() + $duration) >= $currentDate->getTimestamp();
+    }
+
+    /**
+     * @param \DateTime $eventStart
+     * @param int $duration
+     * @param \DateTime|null $currentDate
+     * @return bool
+     */
+    protected function isEventInPast(\DateTime $eventStart, $duration = 0, \DateTime $currentDate = null)
+    {
+        if (is_null($currentDate)) {
+            $currentDate = new \DateTime('midnight');
+        }
+
+        if ($eventStart->getTimestamp() + $duration <= $currentDate->getTimestamp()) {
+            return true;
+        }
+
+        return false;
     }
 
     /**

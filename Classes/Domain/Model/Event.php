@@ -1,29 +1,6 @@
 <?php
-namespace GuteBotschafter\GbEvents\Domain\Model;
 
-/***************************************************************
- *  Copyright notice
- *
- *  (c) 2011-2015 Morton Jonuschat <m.jonuschat@gute-botschafter.de>, Gute Botschafter GmbH
- *
- *  All rights reserved
- *
- *  This script is part of the TYPO3 project. The TYPO3 project is
- *  free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  The GNU General Public License can be found at
- *  http://www.gnu.org/copyleft/gpl.html.
- *
- *  This script is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  This copyright notice MUST APPEAR in all copies of the script!
- ***************************************************************/
+namespace In2code\GbEvents\Domain\Model;
 
 use TYPO3\CMS\Core\Resource\FileReference;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -348,7 +325,7 @@ class Event extends AbstractEntity implements EventInterface
      */
     public function getEventDate()
     {
-        return $this->eventDate->modify('midnight');
+        return $this->eventDate;
     }
 
     /**
@@ -682,10 +659,8 @@ class Event extends AbstractEntity implements EventInterface
     {
         $now = new \DateTime('now', new \DateTimeZone('UTC'));
         $startDate = clone($this->getEventDate());
-        $startDate->add($this->getEventTimeAsDateInterval());
         $startDate->setTimezone(new \DateTimeZone('UTC'));
         $stopDate = clone($this->getEventStopDate());
-        $stopDate->add($this->getEventTimeAsDateInterval())->add(new \DateInterval('PT1H'));
         $stopDate->setTimezone(new \DateTimeZone('UTC'));
 
         $iCalData = [];
@@ -697,14 +672,13 @@ class Event extends AbstractEntity implements EventInterface
         $iCalData[] = 'DESCRIPTION:' . self::escapeTextForIcal($this->getDescription());
         $iCalData[] = 'CLASS:PUBLIC';
 
-        if ($this->getIsOneDayEvent()) {
-            $iCalData[] = 'DTSTART;VALUE=DATE:' . $startDate->format('Ymd');
-            $iCalData[] = 'DTEND;VALUE=DATE:' . $stopDate->format('Ymd');
-        } else {
-            $iCalData[] = 'DTSTART:' . $startDate->format('Ymd\THis\Z');
-            $iCalData[] = 'DTEND:' . $stopDate->format('Ymd\THis\Z');
-        }
+        // start and endtime
+        $iCalData[] = 'DTSTART:' . $startDate->format('Ymd\THis\Z');
+        $iCalData[] = 'DTEND:' . $stopDate->format('Ymd\THis\Z');
+
+        // the date/time that the iCal object was created
         $iCalData[] = 'DTSTAMP:' . $now->format('Ymd\THis\Z');
+
         if ($this->isRecurringEvent()) {
             $iCalData[] = 'RRULE:' . $this->buildRecurrenceRule();
         }
@@ -904,7 +878,7 @@ class Event extends AbstractEntity implements EventInterface
     /**
      * Check if the given date is to be excluded from the list of recurring events
      *
-     * @param  \DateTime $date
+     * @param \DateTime $date
      * @return bool
      */
     protected function isExcludedDate(\DateTime $date)
@@ -929,16 +903,20 @@ class Event extends AbstractEntity implements EventInterface
      *
      * @return bool
      */
-    protected function isRecurringEvent()
+    public function isRecurringEvent()
     {
-        return $this->recurringDays || $this->recurringWeeks;
+        if ($this->getRecurringDays() || $this->getRecurringWeeks()) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
      * Expand the given date to include a year (if missing) and convert to a
      * DateTime object
      *
-     * @param  string $excludeDate
+     * @param string $excludeDate
      * @return \DateTime
      */
     protected function expandExcludeDate($excludeDate)

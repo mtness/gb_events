@@ -4,7 +4,7 @@ if (!defined('TYPO3_MODE')) {
 }
 
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-    'GuteBotschafter.GbEvents',
+    'In2code.GbEvents',
     'Main',
     [
         'Event' => 'list, show',
@@ -15,17 +15,20 @@ if (!defined('TYPO3_MODE')) {
 );
 
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-    'GuteBotschafter.GbEvents',
+    'In2code.GbEvents',
     'Upcoming',
     [
         'Upcoming' => 'list',
     ]
 );
 
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/install']['update']['eventSlug']
+    = \In2code\GbEvents\Updates\EventSlugUpdater::class;
+
 // ke_search indexer
 if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('ke_search')) {
     $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['registerIndexerConfiguration'][] =
-        'EXT:gb_events/Classes/Hooks/EventIndexer.php:' . \GuteBotschafter\GbEvents\Hooks\EventIndexer::class;
+        'EXT:gb_events/Classes/Hooks/EventIndexer.php:' . \In2code\GbEvents\Hooks\EventIndexer::class;
     $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['customIndexer'][] =
-        \GuteBotschafter\GbEvents\Hooks\EventIndexer::class;
+        \In2code\GbEvents\Hooks\EventIndexer::class;
 }
