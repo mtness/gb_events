@@ -2,6 +2,7 @@
 
 | Version    | Date       | State         | Description                                                                  |
 | ---------- | ---------- | ------------- | ---------------------------------------------------------------------------- |
+| 9.0.1      | 2020-11-09 | BUGFIX        | Show not appearing non-recurring events again |
 | 9.0.0      | 2020-11-06 | [!!!]FEATURE  | The archive shows now events from the past, the start and end time of an event is now available in the iCal download, add url_segment field for events |
 | 8.0.0      | 2020-11-03 | [!!!]BUGFIX   | Drop TYPO3 6 and 7 support, Add TYPO3 9 support |
 | 7.0.1      | 2016-01-20 | BUGFIX        | Re-enable RTE for description field |
