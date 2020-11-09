@@ -229,55 +229,53 @@ class EventRepository extends Repository
         $days = [];
 
         foreach ($events as $event) {
-            if ($event->isRecurringEvent()) {
-                foreach ($event->getEventDates($startDate, $stopDate, $grouped) as $eventDate) {
-                    if ($archive) {
-                        if ($grouped === false) {
-                            if ($checkDuration === false && !$this->isEventInPast($eventDate)) {
-                                continue;
-                            }
-                            if ($checkDuration === true && !$this->isEventInPast($eventDate, $event->getDuration())) {
-                                continue;
-                            }
-                        } else {
-                            if (!$this->isEventInPast($eventDate, 0, $startDate)) {
-                                continue;
-                            }
+            foreach ($event->getEventDates($startDate, $stopDate, $grouped) as $eventDate) {
+                if ($archive) {
+                    if ($grouped === false) {
+                        if ($checkDuration === false && !$this->isEventInPast($eventDate)) {
+                            continue;
                         }
-                        $recurringEvent = clone($event);
-                        $recurringEvent->setEventDate($eventDate);
-
-                        if ($grouped) {
-                            $days[$eventDate->format('Y-m-d')]['events'][$event->getUid()] = $recurringEvent;
-                        } else {
-                            if ($recurringEvent->getEventStopDate() <= $today) {
-                                $days[$eventDate->format('Y-m-d') . '_' . $event->getUniqueIdentifier()] =
-                                    $recurringEvent;
-                            }
+                        if ($checkDuration === true && !$this->isEventInPast($eventDate, $event->getDuration())) {
+                            continue;
                         }
                     } else {
-                        if ($grouped === false) {
-                            if ($checkDuration === false && !$this->isVisibleEvent($eventDate)) {
-                                continue;
-                            }
-                            if ($checkDuration === true && !$this->isVisibleEvent($eventDate, $event->getDuration())) {
-                                continue;
-                            }
-                        } else {
-                            if (!$this->isVisibleEvent($eventDate, 0, $startDate)) {
-                                continue;
-                            }
+                        if (!$this->isEventInPast($eventDate, 0, $startDate)) {
+                            continue;
                         }
-                        $recurringEvent = clone($event);
-                        $recurringEvent->setEventDate($eventDate);
+                    }
+                    $recurringEvent = clone($event);
+                    $recurringEvent->setEventDate($eventDate);
 
-                        if ($grouped) {
-                            $days[$eventDate->format('Y-m-d')]['events'][$event->getUid()] = $recurringEvent;
-                        } else {
-                            if ($recurringEvent->getEventStopDate() >= $today) {
-                                $days[$eventDate->format('Y-m-d') . '_' . $event->getUniqueIdentifier()] =
-                                    $recurringEvent;
-                            }
+                    if ($grouped) {
+                        $days[$eventDate->format('Y-m-d')]['events'][$event->getUid()] = $recurringEvent;
+                    } else {
+                        if ($recurringEvent->getEventStopDate() <= $today) {
+                            $days[$eventDate->format('Y-m-d') . '_' . $event->getUniqueIdentifier()] =
+                                $recurringEvent;
+                        }
+                    }
+                } else {
+                    if ($grouped === false) {
+                        if ($checkDuration === false && !$this->isVisibleEvent($eventDate)) {
+                            continue;
+                        }
+                        if ($checkDuration === true && !$this->isVisibleEvent($eventDate, $event->getDuration())) {
+                            continue;
+                        }
+                    } else {
+                        if (!$this->isVisibleEvent($eventDate, 0, $startDate)) {
+                            continue;
+                        }
+                    }
+                    $recurringEvent = clone($event);
+                    $recurringEvent->setEventDate($eventDate);
+
+                    if ($grouped) {
+                        $days[$eventDate->format('Y-m-d')]['events'][$event->getUid()] = $recurringEvent;
+                    } else {
+                        if ($recurringEvent->getEventStopDate() >= $today) {
+                            $days[$eventDate->format('Y-m-d') . '_' . $event->getUniqueIdentifier()] =
+                                $recurringEvent;
                         }
                     }
                 }
