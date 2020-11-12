@@ -19,7 +19,7 @@
           <td>
             <f:render section="eventDate" arguments="{event : event}"/>
           <td>
-            <f:link.action action="show" pageUid="{settings.detailsPid}" arguments="{event : event}">{event.title}
+            <f:link.action action="show" controller="Event" pageUid="{settings.detailsPid}" arguments="{event : event}">{event.title}
             </f:link.action>
           </td>
           <td>{event.location}</td>
