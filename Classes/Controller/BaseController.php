@@ -69,6 +69,24 @@ abstract class BaseController extends ActionController
     }
 
     /**
+     * @param \TYPO3\CMS\Extbase\Mvc\RequestInterface $request
+     * @param \TYPO3\CMS\Extbase\Mvc\ResponseInterface $response
+     * @throws \Exception|\TYPO3\CMS\Extbase\Property\Exception
+     */
+    public function processRequest(\TYPO3\CMS\Extbase\Mvc\RequestInterface $request, \TYPO3\CMS\Extbase\Mvc\ResponseInterface $response) {
+        try {
+            parent::processRequest($request, $response);
+        }
+        catch(\TYPO3\CMS\Extbase\Property\Exception $e) {
+            if ($e instanceof \TYPO3\CMS\Extbase\Property\Exception\TargetNotFoundException) {
+                $GLOBALS['TSFE']->pageNotFoundAndExit('Die gewünschte Stellenausschreibung wurde nicht gefunden.');
+            } else {
+                throw $e;
+            }
+        }
+    }
+
+    /**
      * @return DataMapper
      */
     protected function getDataMapper()
