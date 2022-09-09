@@ -1,6 +1,8 @@
 <?php
 namespace In2code\GbEvents\Controller;
 
+use Psr\Http\Message\ResponseInterface;
+use TYPO3\CMS\Extbase\Http\ForwardResponse;
 use In2code\GbEvents\Domain\Model\Event;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -12,20 +14,20 @@ class EventController extends BaseController
     /**
      * Displays all Events
      *
-     * @return void
+     *
      */
-    public function listAction()
+    public function listAction(): ResponseInterface
     {
         switch ($this->settings['displayMode']) {
             case 'calendar':
-                $this->forward('show', 'Calendar');
+                return (new ForwardResponse('show'))->withControllerName('Calendar');
 
-                return;
+                return $this->htmlResponse(null);
                 break;
             case 'archive':
-                $this->forward('list', 'Archive');
+                return (new ForwardResponse('list'))->withControllerName('Archive');
 
-                return;
+                return $this->htmlResponse(null);
                 break;
             default:
                 $events = $this->eventRepository->findAll(
@@ -36,6 +38,7 @@ class EventController extends BaseController
                 $this->addCacheTags($events, 'tx_gbevents_domain_model_event');
                 $this->view->assign('events', $events);
         }
+        return $this->htmlResponse();
     }
 
     /**
@@ -44,9 +47,10 @@ class EventController extends BaseController
      * @param Event $event
      * @return void
      */
-    public function showAction(Event $event)
+    public function showAction(Event $event): ResponseInterface
     {
         $this->addCacheTags($event, 'tx_gbevents_domain_model_event');
         $this->view->assign('event', $event);
+        return $this->htmlResponse();
     }
 }

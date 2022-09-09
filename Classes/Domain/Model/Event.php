@@ -2,6 +2,13 @@
 
 namespace In2code\GbEvents\Domain\Model;
 
+use TYPO3\CMS\Extbase\Annotation\Validate;
+use DateTime;
+use TYPO3\CMS\Extbase\Domain\Model\Category;
+use TYPO3\CMS\Extbase\Annotation\ORM\Lazy;
+use Exception;
+use DateInterval;
+use DateTimeZone;
 use TYPO3\CMS\Core\Resource\FileReference;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
@@ -16,12 +23,12 @@ use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 class Event extends AbstractEntity implements EventInterface
 {
     /**
-     * @var \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
+     * @var ConfigurationManagerInterface ;
      */
     protected $configurationManager;
 
     /**
-     * @var \TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
+     * @var ObjectManagerInterface ;
      */
     protected $objectManager;
 
@@ -43,7 +50,7 @@ class Event extends AbstractEntity implements EventInterface
      * The title of the event
      *
      * @var string
-     * @validate NotEmpty
+     * @Validate("NotEmpty")
      */
     protected $title;
 
@@ -58,7 +65,7 @@ class Event extends AbstractEntity implements EventInterface
      * A detailed description of the event
      *
      * @var string
-     * @validate NotEmpty
+     * @Validate("NotEmpty")
      */
     protected $description;
 
@@ -72,8 +79,8 @@ class Event extends AbstractEntity implements EventInterface
     /**
      * The date when the event happens
      *
-     * @var \DateTime
-     * @validate NotEmpty
+     * @var DateTime
+     * @Validate("NotEmpty")
      */
     protected $eventDate;
 
@@ -87,14 +94,14 @@ class Event extends AbstractEntity implements EventInterface
     /**
      * images
      *
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\FileReference>
+     * @var ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\FileReference>
      */
     protected $images;
 
     /**
      * The downloads for this event
      *
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\FileReference>
+     * @var ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\FileReference>
      */
     protected $downloads;
 
@@ -115,14 +122,14 @@ class Event extends AbstractEntity implements EventInterface
     /**
      * The date until which a recurring event should repeat
      *
-     * @var \DateTime
+     * @var DateTime
      */
     protected $recurringStop;
 
     /**
      * The date when the event ends
      *
-     * @var \DateTime
+     * @var DateTime
      */
     protected $eventStopDate;
 
@@ -141,15 +148,15 @@ class Event extends AbstractEntity implements EventInterface
     protected $recurringExcludeDates;
 
     /**
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\Category>
-     * @lazy
+     * @var ObjectStorage<Category>
+     * @Lazy
      */
     protected $categories;
 
     /**
      * inject the objectManager
      *
-     * @param \TYPO3\CMS\Extbase\Object\ObjectManagerInterface $objectManager $objectManager
+     * @param ObjectManagerInterface $objectManager $objectManager
      */
     public function injectObjectManager(ObjectManagerInterface $objectManager)
     {
@@ -211,7 +218,7 @@ class Event extends AbstractEntity implements EventInterface
                     try {
                         $date = $this->expandExcludeDate($holiday);
                         $this->excludedDates[$date->format('Y')][$date->format('m-d')] = 1;
-                    } catch (\Exception $e) {
+                    } catch (Exception $e) {
                         continue;
                     }
                 }
@@ -225,7 +232,7 @@ class Event extends AbstractEntity implements EventInterface
             try {
                 $date = $this->expandExcludeDate($excludedDate);
                 $this->excludedDates[$date->format('Y')][$date->format('m-d')] = 1;
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 continue;
             }
         }
@@ -310,10 +317,10 @@ class Event extends AbstractEntity implements EventInterface
     }
 
     /**
-     * @param \DateTime $eventDate
+     * @param DateTime $eventDate
      * @return void
      */
-    public function setEventDate(\DateTime $eventDate)
+    public function setEventDate(DateTime $eventDate)
     {
         $this->eventDate = $eventDate;
     }
@@ -321,7 +328,7 @@ class Event extends AbstractEntity implements EventInterface
     /**
      * This only returns the initial event date
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getEventDate()
     {
@@ -334,15 +341,15 @@ class Event extends AbstractEntity implements EventInterface
      * stopDate, taking the defined end of recurrance
      * into account
      *
-     * @param \DateTime $startDate
-     * @param \DateTime $stopDate
+     * @param DateTime $startDate
+     * @param DateTime $stopDate
      * @param bool $expandedList
      * @return array $eventDates
      */
-    public function getEventDates(\DateTime $startDate, \DateTime $stopDate, $expandedList = false)
+    public function getEventDates(DateTime $startDate, DateTime $stopDate, $expandedList = false)
     {
-        $oneDay = new \DateInterval('P1D');
-        $oneMonth = new \DateInterval('P1M');
+        $oneDay = new DateInterval('P1D');
+        $oneMonth = new DateInterval('P1M');
 
         $startMonth = clone($startDate);
         $startMonth->modify('first day of this month');
@@ -359,7 +366,7 @@ class Event extends AbstractEntity implements EventInterface
         $recurringDays = $this->getRecurringDaysAsText();
         $eventDates = [];
         foreach ($recurringMonths as $workDate) {
-            /** @var \DateTime $workDate */
+            /** @var DateTime $workDate */
             $workingMonth = $workDate->format('n');
 
             // Weeks have been selected, check every nth week / day combination
@@ -576,7 +583,7 @@ class Event extends AbstractEntity implements EventInterface
     }
 
     /**
-     * @param \DateTime $recurringStop
+     * @param DateTime $recurringStop
      * @return void
      */
     public function setRecurringStop($recurringStop)
@@ -585,7 +592,7 @@ class Event extends AbstractEntity implements EventInterface
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
     public function getRecurringStop()
     {
@@ -612,7 +619,7 @@ class Event extends AbstractEntity implements EventInterface
     /**
      * Set the event stop date
      *
-     * @param \DateTime $eventStopDate
+     * @param DateTime $eventStopDate
      * @return void
      */
     public function setEventStopDate($eventStopDate)
@@ -623,7 +630,7 @@ class Event extends AbstractEntity implements EventInterface
     /**
      * Get the event stop date
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getEventStopDate()
     {
@@ -657,11 +664,11 @@ class Event extends AbstractEntity implements EventInterface
      */
     public function iCalendarData()
     {
-        $now = new \DateTime('now', new \DateTimeZone('UTC'));
+        $now = new DateTime('now', new DateTimeZone('UTC'));
         $startDate = clone($this->getEventDate());
-        $startDate->setTimezone(new \DateTimeZone('UTC'));
+        $startDate->setTimezone(new DateTimeZone('UTC'));
         $stopDate = clone($this->getEventStopDate());
-        $stopDate->setTimezone(new \DateTimeZone('UTC'));
+        $stopDate->setTimezone(new DateTimeZone('UTC'));
 
         $iCalData = [];
 
@@ -767,7 +774,7 @@ class Event extends AbstractEntity implements EventInterface
     /**
      * Tries an intelligent guess as to the start time of an event
      *
-     * @return \DateInterval
+     * @return DateInterval
      */
     protected function getEventTimeAsDateInterval()
     {
@@ -778,7 +785,7 @@ class Event extends AbstractEntity implements EventInterface
             $minutes = $matches[2];
         }
 
-        return new \DateInterval(sprintf('PT%dH%dM0S', $hours, $minutes));
+        return new DateInterval(sprintf('PT%dH%dM0S', $hours, $minutes));
     }
 
     /**
@@ -878,10 +885,10 @@ class Event extends AbstractEntity implements EventInterface
     /**
      * Check if the given date is to be excluded from the list of recurring events
      *
-     * @param \DateTime $date
+     * @param DateTime $date
      * @return bool
      */
-    protected function isExcludedDate(\DateTime $date)
+    protected function isExcludedDate(DateTime $date)
     {
         $this->initializeExcludedDates();
         if (array_key_exists($date->format('Y'), $this->excludedDates)
@@ -917,7 +924,7 @@ class Event extends AbstractEntity implements EventInterface
      * DateTime object
      *
      * @param string $excludeDate
-     * @return \DateTime
+     * @return DateTime
      */
     protected function expandExcludeDate($excludeDate)
     {
@@ -929,7 +936,7 @@ class Event extends AbstractEntity implements EventInterface
             }
         }
 
-        return new \DateTime($excludeDate);
+        return new DateTime($excludeDate);
     }
 
     /**
@@ -985,7 +992,7 @@ class Event extends AbstractEntity implements EventInterface
     }
 
     /**
-     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage
+     * @return ObjectStorage
      */
     public function getCategories()
     {
@@ -993,7 +1000,7 @@ class Event extends AbstractEntity implements EventInterface
     }
 
     /**
-     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage $categories
+     * @param ObjectStorage $categories
      */
     public function setCategories($categories)
     {

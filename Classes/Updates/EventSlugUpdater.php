@@ -13,7 +13,7 @@ class EventSlugUpdater implements UpgradeWizardInterface
 {
 
     /**
-     * @var \In2code\GbEvents\Service\SlugService
+     * @var SlugService
      */
     protected $slugService;
 

@@ -1,10 +1,14 @@
 <?php
-if (!defined('TYPO3_MODE')) {
-    die('Access denied.');
-}
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addLLrefForTCAdescr(
-    'tx_gbevents_domain_model_event',
-    'EXT:gb_events/Resources/Private/Language/locallang_csh_tx_gbevents_domain_model_event.xlf'
+call_user_func(
+    function () {
+        defined('TYPO3') || die();
+
+        ExtensionManagementUtility::addLLrefForTCAdescr(
+            'tx_gbevents_domain_model_event',
+            'EXT:gb_events/Resources/Private/Language/locallang_csh_tx_gbevents_domain_model_event.xlf'
+        );
+        ExtensionManagementUtility::allowTableOnStandardPages('tx_gbevents_domain_model_event');
+    }
 );
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages('tx_gbevents_domain_model_event');

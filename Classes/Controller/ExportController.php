@@ -1,6 +1,8 @@
 <?php
 namespace In2code\GbEvents\Controller;
 
+use Psr\Http\Message\ResponseInterface;
+use Exception;
 use In2code\GbEvents\Domain\Model\Event;
 
 /**
@@ -23,7 +25,7 @@ class ExportController extends BaseController
      *
      * @return string The rendered view
      */
-    public function listAction()
+    public function listAction(): ResponseInterface
     {
         $events = $this->eventRepository->findAll(
             $this->settings['years'],
@@ -37,18 +39,20 @@ class ExportController extends BaseController
         }
         $this->addCacheTags($events, 'tx_gbevents_domain_model_event');
         $this->renderCalendar(join("\n", $content));
+        return $this->htmlResponse();
     }
 
     /**
      * Exports a single Event as iCalendar file
      *
-     * @param \In2code\GbEvents\Domain\Model\Event $event
-     * @throws \Exception
+     * @param Event $event
+     * @throws Exception
      */
-    public function showAction(Event $event)
+    public function showAction(Event $event): ResponseInterface
     {
         $this->addCacheTags($event);
         $this->renderCalendar($event->iCalendarData(), $event->iCalendarFilename());
+        return $this->htmlResponse();
     }
 
     /**
@@ -56,17 +60,17 @@ class ExportController extends BaseController
      *
      * @param string $content
      * @param string $filename
-     * @throws \Exception
+     * @throws Exception
      * @return void
      */
     protected function setHeaders($content, $filename)
     {
         if (ob_get_contents()) {
-            throw new \Exception('Some data has already been sent to the browser', 1408607681);
+            throw new Exception('Some data has already been sent to the browser', 1408607681);
         }
         header('Content-Type: text/calendar');
         if (headers_sent()) {
-            throw new \Exception('Some data has already been sent to the browser', 1408607681);
+            throw new Exception('Some data has already been sent to the browser', 1408607681);
         }
 
         header('Cache-Control: public');
@@ -84,12 +88,12 @@ class ExportController extends BaseController
      *
      * @param  string $events
      * @param  string $filename
-     * @throws \Exception
+     * @throws Exception
      */
     protected function renderCalendar($events, $filename = 'calendar.ics')
     {
         if (trim($events) === '') {
-            throw new \Exception('No events to process', 1408611856);
+            throw new Exception('No events to process', 1408611856);
         }
         $content = join("\n", [
             ExportController::VCALENDAR_START,

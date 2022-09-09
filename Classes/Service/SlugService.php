@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace In2code\GbEvents\Service;
 
+use PDO;
 use In2code\GbEvents\Utility\DatabaseUtility;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
@@ -26,7 +27,6 @@ class SlugService
      * @var array
      */
     protected $fieldConfig = [];
-
 
     /**
      * @var string
@@ -72,7 +72,7 @@ class SlugService
                 $this->queryBuilder->expr()->orX(
                     $this->queryBuilder->expr()->eq(
                         $this->slugField,
-                        $this->queryBuilder->createNamedParameter('', \PDO::PARAM_STR)
+                        $this->queryBuilder->createNamedParameter('', PDO::PARAM_STR)
                     ),
                     $this->queryBuilder->expr()->isNull($this->slugField)
                 )
@@ -90,7 +90,7 @@ class SlugService
                     ->where(
                         $this->queryBuilder->expr()->eq(
                             'uid',
-                            $this->queryBuilder->createNamedParameter($record['uid'], \PDO::PARAM_INT)
+                            $this->queryBuilder->createNamedParameter($record['uid'], PDO::PARAM_INT)
                         )
                     )
                     ->set($this->slugField, $slug);
@@ -115,7 +115,7 @@ class SlugService
             ->where(
                 $queryBuilder->expr()->eq(
                     $this->slugField,
-                    $queryBuilder->createNamedParameter($slug, \PDO::PARAM_STR)
+                    $queryBuilder->createNamedParameter($slug, PDO::PARAM_STR)
                 )
             )
             ->execute()->fetchColumn(0);
@@ -140,7 +140,7 @@ class SlugService
                 $this->queryBuilder->expr()->orX(
                     $this->queryBuilder->expr()->eq(
                         $this->slugField,
-                        $this->queryBuilder->createNamedParameter('', \PDO::PARAM_STR)
+                        $this->queryBuilder->createNamedParameter('', PDO::PARAM_STR)
                     ),
                     $this->queryBuilder->expr()->isNull($this->slugField)
                 )

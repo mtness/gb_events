@@ -1,6 +1,7 @@
 <?php
 namespace In2code\GbEvents\Domain\Model;
 
+use DateTime;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 /**
@@ -60,15 +61,15 @@ interface EventInterface
     public function getLocation();
 
     /**
-     * @param \DateTime $eventDate
+     * @param DateTime $eventDate
      * @return void
      */
-    public function setEventDate(\DateTime $eventDate);
+    public function setEventDate(DateTime $eventDate);
 
     /**
      * This only returns the initial event date
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getEventDate();
 
@@ -78,10 +79,10 @@ interface EventInterface
      * stopDate, taking the defined end of recurrance
      * into account
      *
-     * @param \DateTime $startDate
-     * @param \DateTime $stopDate
+     * @param DateTime $startDate
+     * @param DateTime $stopDate
      */
-    public function getEventDates(\DateTime $startDate, \DateTime $stopDate);
+    public function getEventDates(DateTime $startDate, DateTime $stopDate);
 
     /**
      * @param string $eventTime
@@ -139,13 +140,13 @@ interface EventInterface
     public function getRecurringDays();
 
     /**
-     * @param \DateTime $recurringStop
+     * @param DateTime $recurringStop
      * @return void
      */
     public function setRecurringStop($recurringStop);
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
     public function getRecurringStop();
 
@@ -174,7 +175,7 @@ interface EventInterface
     /**
      * Set the event stop date
      *
-     * @param \DateTime $eventStopDate
+     * @param DateTime $eventStopDate
      * @return void
      */
     public function setEventStopDate($eventStopDate);
@@ -182,7 +183,7 @@ interface EventInterface
     /**
      * Get the event stop date
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getEventStopDate();
 

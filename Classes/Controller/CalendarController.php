@@ -1,6 +1,9 @@
 <?php
 namespace In2code\GbEvents\Controller;
 
+use Psr\Http\Message\ResponseInterface;
+use DateTime;
+use Exception;
 /**
  * Controller for the calendar view
  */
@@ -12,13 +15,13 @@ class CalendarController extends BaseController
      * @param  string $start
      * @return void
      */
-    public function showAction($start = 'today')
+    public function showAction($start = 'today'): ResponseInterface
     {
         // Startdatum setzen
-        $startDate = new \DateTime('today');
+        $startDate = new DateTime('today');
         try {
             $startDate->modify($start);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $startDate->modify('midnight');
         }
 
@@ -83,5 +86,6 @@ class CalendarController extends BaseController
             'nextMonth' => $nextMonth->format('Y-m-d'),
             'prevMonth' => $previousMonth->format('Y-m-d'),
         ]);
+        return $this->htmlResponse();
     }
 }

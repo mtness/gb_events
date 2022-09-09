@@ -18,11 +18,17 @@
 			"email": "sebastian.stein@in2code.de",
 			"role": "Developer",
 			"homepage": "https://in2code.de"
+		},
+		{
+			"name": "Alexander Kellner",
+			"email": "alexander.kellner@in2code.de",
+			"role": "Developer",
+			"homepage": "https://in2code.de"
 		}
 	],
 	"require": {
-		"php": "^7.0",
-		"typo3/cms-core": "^8.5 || ^9.5"
+		"php": "^7.4 || ^8.0",
+		"typo3/cms-core": "^11.5"
 	},
 	"autoload": {
 		"psr-4": {
