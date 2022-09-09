@@ -151,7 +151,7 @@ class EventIndexer
             // Honor hooks to modify the indexed data
             if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyEventIndexEntry'])) {
                 foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyEventIndexEntry'] as $_classRef) {
-                    $_procObj = &GeneralUtility::makeInstance($_classRef);
+                    $_procObj = GeneralUtility::makeInstance($_classRef);
                     $_procObj->modifyEventIndexEntry(
                         $indexTitle,
                         $abstract,
