@@ -1,8 +1,9 @@
 <?php
+
 namespace In2code\GbEvents\Hooks;
 
+use tx_kesearch_indexer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Utility\ArrayUtility;
 
 class EventIndexer
 {
@@ -58,7 +59,7 @@ class EventIndexer
         $params['items'][] = [
             'LLL:EXT:gb_events/Resources/Private/Language/locallang_db.xml:tx_gbevents_kesearch_event.indexer_name',
             'gbevents_event',
-            'EXT:gb_events/Resources/Public/Icons/selicon_indexer_gbevents_event.gif',
+            'EXT:gb_events/Resources/Public/Icons/Extension.svg',
         ];
         $GLOBALS['TCA']['tx_kesearch_indexerconfig']['columns']['target_pid']['displayCond'] .= ',gbevents_event';
         $GLOBALS['TCA']['tx_kesearch_indexerconfig']['columns']['sysfolder']['displayCond'] .= ',gbevents_event';
@@ -72,7 +73,7 @@ class EventIndexer
      * @param \tx_kesearch_indexer $indexerObject
      * @return bool|string
      */
-    public function customIndexer(&$indexerConfig, \tx_kesearch_indexer &$indexerObject)
+    public function customIndexer(&$indexerConfig, tx_kesearch_indexer &$indexerObject)
     {
         $this->indexerConfig = $indexerConfig;
         $this->indexerObject = $indexerObject;
@@ -83,7 +84,7 @@ class EventIndexer
             return false;
         }
 
-        foreach (ArrayUtility::trimExplode(',', $this->indexerConfig['sysfolder'], true) as $pid) {
+        foreach (GeneralUtility::trimExplode(',', $this->indexerConfig['sysfolder'], true) as $pid) {
             $this->indexEvents($pid);
         }
         $this->content .= '<p><b>Indexer "'
@@ -110,7 +111,7 @@ class EventIndexer
             $event['location'],
         ];
 
-        return trim(join("\n", array_filter($content)));
+        return trim(implode("\n", array_filter($content)));
     }
 
     /**
@@ -150,7 +151,7 @@ class EventIndexer
             // Honor hooks to modify the indexed data
             if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyEventIndexEntry'])) {
                 foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyEventIndexEntry'] as $_classRef) {
-                    $_procObj = &GeneralUtility::getUserObj($_classRef);
+                    $_procObj = &GeneralUtility::makeInstance($_classRef);
                     $_procObj->modifyEventIndexEntry(
                         $indexTitle,
                         $abstract,
