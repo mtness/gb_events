@@ -1,9 +1,6 @@
-# IDE
 msi.iws
 .idea/
 nbproject/
-
-# OS
 .DS_Store
 .DS_Store?
 ._*
@@ -11,3 +8,7 @@ nbproject/
 .Trashes
 ehthumbs.db
 Thumbs.db
+vendor/
+composer.lock
+.php-cs-fixer.cache
+/public/

@@ -1,10 +1,20 @@
 <?php
+
 namespace In2code\GbEvents\Controller;
 
+use ArrayAccess;
 use In2code\GbEvents\Domain\Repository\EventRepository;
+use Psr\Http\Message\ResponseInterface;
+use Traversable;
+use TYPO3\CMS\Core\Http\ApplicationType;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+use TYPO3\CMS\Extbase\Mvc\RequestInterface;
 use TYPO3\CMS\Extbase\Persistence\Generic\Mapper\DataMapper;
+use TYPO3\CMS\Extbase\Property\Exception as ExceptionExtbaseProperty;
+use TYPO3\CMS\Extbase\Property\Exception\TargetNotFoundException;
+use TYPO3\CMS\Frontend\Controller\ErrorController;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 /**
@@ -13,7 +23,7 @@ use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 abstract class BaseController extends ActionController
 {
     /**
-     * @var \In2code\GbEvents\Domain\Repository\EventRepository
+     * @var EventRepository
      */
     protected $eventRepository;
 
@@ -41,11 +51,11 @@ abstract class BaseController extends ActionController
      */
     protected function addCacheTags($items, $additionalTags = null)
     {
-        if (TYPO3_MODE === 'BE') {
+        if (ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isBackend()) {
             return;
         }
 
-        if (!is_array($items) && !$items instanceof \Traversable && !$items instanceof \ArrayAccess) {
+        if (!is_array($items) && !$items instanceof Traversable && !$items instanceof ArrayAccess) {
             $items = [$items];
         }
         if (!is_array($additionalTags)) {
@@ -69,21 +79,25 @@ abstract class BaseController extends ActionController
     }
 
     /**
-     * @param \TYPO3\CMS\Extbase\Mvc\RequestInterface $request
-     * @param \TYPO3\CMS\Extbase\Mvc\ResponseInterface $response
-     * @throws \Exception|\TYPO3\CMS\Extbase\Property\Exception
+     * @param RequestInterface $request
+     * @return ResponseInterface
+     * @throws ExceptionExtbaseProperty
      */
-    public function processRequest(\TYPO3\CMS\Extbase\Mvc\RequestInterface $request, \TYPO3\CMS\Extbase\Mvc\ResponseInterface $response) {
+    public function processRequest(RequestInterface $request): ResponseInterface
+    {
         try {
-            parent::processRequest($request, $response);
-        }
-        catch(\TYPO3\CMS\Extbase\Property\Exception $e) {
-            if ($e instanceof \TYPO3\CMS\Extbase\Property\Exception\TargetNotFoundException) {
-                $GLOBALS['TSFE']->pageNotFoundAndExit('Die gewünschte Stellenausschreibung wurde nicht gefunden.');
+            $response = parent::processRequest($request);
+        } catch (ExceptionExtbaseProperty $exception) {
+            if ($exception instanceof TargetNotFoundException) {
+                $response = GeneralUtility::makeInstance(ErrorController::class)->pageNotFoundAction(
+                    $GLOBALS['TYPO3_REQUEST'],
+                    'Die gewünschte Stellenausschreibung wurde nicht gefunden.'
+                );
             } else {
-                throw $e;
+                throw $exception;
             }
         }
+        return $response;
     }
 
     /**

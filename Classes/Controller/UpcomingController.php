@@ -1,5 +1,8 @@
 <?php
+
 namespace In2code\GbEvents\Controller;
+
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * UpcomingController
@@ -11,7 +14,7 @@ class UpcomingController extends BaseController
      *
      * @return void
      */
-    public function listAction()
+    public function listAction(): ResponseInterface
     {
         $events = $this->eventRepository->findUpcoming(
             $this->settings['limit'],
@@ -20,5 +23,6 @@ class UpcomingController extends BaseController
         );
         $this->addCacheTags($events, 'tx_gbevents_domain_model_event');
         $this->view->assign('events', $events);
+        return $this->htmlResponse();
     }
 }

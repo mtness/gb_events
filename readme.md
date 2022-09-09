@@ -2,6 +2,7 @@
 
 | Version | Date       | State         | Description                                                                                                                                            |
 |---------|------------| ------------- |--------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 10.0.0  | 2022-10-10 | BUGFIX        | TYPO3 11 update                                                                                                                                        |
 | 9.0.3   | 2022-01-14 | BUGFIX        | Add 404 handling for hidden and deleted records                                                                                                        |
 | 9.0.2   | 2020-11-12 | BUGFIX        | Add missing controller to the event detail link on list views                                                                                          |
 | 9.0.1   | 2020-11-09 | BUGFIX        | Show not appearing non-recurring events again                                                                                                          |

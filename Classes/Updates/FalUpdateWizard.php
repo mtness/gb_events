@@ -1,6 +1,14 @@
 <?php
+
 namespace In2code\GbEvents\Updates;
 
+use RuntimeException;
+use TYPO3\CMS\Core\Core\Environment;
+use TYPO3\CMS\Core\Resource\File;
+use TYPO3\CMS\Core\Resource\FileRepository;
+use TYPO3\CMS\Core\Resource\ResourceFactory;
+use TYPO3\CMS\Core\Resource\ResourceStorage;
+use TYPO3\CMS\Core\Resource\StorageRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Install\Updates\AbstractUpdate;
 
@@ -26,51 +34,51 @@ class FalUpdateWizard extends AbstractUpdate
     protected $downloadDirectory;
 
     /**
-     * @var \TYPO3\CMS\Core\Resource\ResourceFactory
+     * @var ResourceFactory
      */
     protected $fileFactory;
 
     /**
-     * @var \TYPO3\CMS\Core\Resource\FileRepository
+     * @var FileRepository
      */
     protected $fileRepository;
 
     /**
-     * @var \TYPO3\CMS\Core\Resource\ResourceStorage
+     * @var ResourceStorage
      */
     protected $storage;
 
     /**
      * Initialize all required repository and factory objects.
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     protected function init()
     {
         $fileadminDirectory = rtrim($GLOBALS['TYPO3_CONF_VARS']['BE']['fileadminDir'], '/') . '/';
         /** @var $storageRepository \TYPO3\CMS\Core\Resource\StorageRepository */
-        $storageRepository = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\StorageRepository');
+        $storageRepository = GeneralUtility::makeInstance(StorageRepository::class);
         $storages = $storageRepository->findAll();
         foreach ($storages as $storage) {
             $storageRecord = $storage->getStorageRecord();
             $configuration = $storage->getConfiguration();
             $isLocalDriver = $storageRecord['driver'] === 'Local';
             $isOnFileadmin = !empty($configuration['basePath'])
-                && GeneralUtility::isFirstPartOfStr($configuration['basePath'], $fileadminDirectory);
+                && \str_starts_with($configuration['basePath'], $fileadminDirectory);
             if ($isLocalDriver && $isOnFileadmin) {
                 $this->storage = $storage;
                 break;
             }
         }
         if (!isset($this->storage)) {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 'Local default storage could not be initialized - might be due to missing sys_file* tables.'
             );
         }
-        $this->fileFactory = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\ResourceFactory');
-        $this->fileRepository = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\FileRepository');
-        $this->imageDirectory = PATH_site . $fileadminDirectory . self::FAL_FOLDER_IMAGES . '/';
-        $this->downloadDirectory = PATH_site . $fileadminDirectory . self::FAL_FOLDER_DOWNLOADS . '/';
+        $this->fileFactory = GeneralUtility::makeInstance(ResourceFactory::class);
+        $this->fileRepository = GeneralUtility::makeInstance(FileRepository::class);
+        $this->imageDirectory = Environment::getPublicPath() . '/' . $fileadminDirectory . self::FAL_FOLDER_IMAGES . '/';
+        $this->downloadDirectory = Environment::getPublicPath() . '/' . $fileadminDirectory . self::FAL_FOLDER_DOWNLOADS . '/';
     }
 
     /**
@@ -171,13 +179,13 @@ class FalUpdateWizard extends AbstractUpdate
 
             $missingFiles = 0;
             foreach ($files as $index => $file) {
-                if (file_exists(PATH_site . self::UPLOADS_FOLDER . $file)) {
+                if (file_exists(Environment::getPublicPath() . '/' . self::UPLOADS_FOLDER . $file)) {
                     GeneralUtility::upload_copy_move(
-                        PATH_site . self::UPLOADS_FOLDER . $file,
+                        Environment::getPublicPath() . '/' . self::UPLOADS_FOLDER . $file,
                         $targetDirectory . $file
                     );
 
-                    /** @var \TYPO3\CMS\Core\Resource\File $fileObject */
+                    /** @var File $fileObject */
                     $fileObject = $this->storage->getFile($folder . '/' . $file);
                     $this->fileRepository->add($fileObject);
                     $dataArray = [

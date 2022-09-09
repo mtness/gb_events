@@ -1,5 +1,10 @@
 <?php
+
 namespace In2code\GbEvents\Controller;
+
+use DateTime;
+use Exception;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * Controller for the calendar view
@@ -12,40 +17,40 @@ class CalendarController extends BaseController
      * @param  string $start
      * @return void
      */
-    public function showAction($start = 'today')
+    public function showAction($start = 'today'): ResponseInterface
     {
         // Startdatum setzen
-        $startDate = new \DateTime('today');
+        $startDate = new DateTime('today');
         try {
             $startDate->modify($start);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $startDate->modify('midnight');
         }
 
         // Start für Kalenderanzeige bestimmen
-        $preDate = clone($startDate);
+        $preDate = clone $startDate;
         if ($startDate->format('N') !== 1) {
             $preDate->modify('last monday of previous month');
         }
 
         // Ende des Monats bestimmen
-        $stopDate = clone($startDate);
+        $stopDate = clone $startDate;
         $stopDate->modify('last day of this month');
         $stopDate->modify('+86399 seconds');
 
-        $postDate = clone($stopDate);
+        $postDate = clone $stopDate;
         if ($stopDate->format('N') !== 7) {
             $postDate->modify('next sunday');
         }
 
         // Navigational dates
-        $nextMonth = clone($startDate);
+        $nextMonth = clone $startDate;
         $nextMonth->modify('first day of next month');
-        $previousMonth = clone($startDate);
+        $previousMonth = clone $startDate;
         $previousMonth->modify('first day of previous month');
 
         $days = [];
-        $runDate = clone($preDate);
+        $runDate = clone $preDate;
         while ($runDate <= $postDate) {
             $days[$runDate->format('Y-m-d')] = [
                 'date' => clone($runDate),
@@ -83,5 +88,6 @@ class CalendarController extends BaseController
             'nextMonth' => $nextMonth->format('Y-m-d'),
             'prevMonth' => $previousMonth->format('Y-m-d'),
         ]);
+        return $this->htmlResponse();
     }
 }
