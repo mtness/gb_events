@@ -59,7 +59,7 @@ class EventIndexer
         $params['items'][] = [
             'LLL:EXT:gb_events/Resources/Private/Language/locallang_db.xml:tx_gbevents_kesearch_event.indexer_name',
             'gbevents_event',
-            'EXT:gb_events/Resources/Public/Icons/selicon_indexer_gbevents_event.gif',
+            'EXT:gb_events/Resources/Public/Icons/Extension.svg',
         ];
         $GLOBALS['TCA']['tx_kesearch_indexerconfig']['columns']['target_pid']['displayCond'] .= ',gbevents_event';
         $GLOBALS['TCA']['tx_kesearch_indexerconfig']['columns']['sysfolder']['displayCond'] .= ',gbevents_event';

@@ -208,7 +208,7 @@ class Event extends AbstractEntity implements EventInterface
         $this->excludedDates = [];
 
         // Global excludes
-        if ((int)($this->settings['forceExcludeHolidays']) !== 0
+        if ((int)($this->settings['forceExcludeHolidays'] ?? 0) !== 0
             || $this->getRecurringExcludeHolidays() === true
         ) {
             if (is_array($this->settings['holidays'])

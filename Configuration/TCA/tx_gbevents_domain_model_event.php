@@ -32,7 +32,7 @@ return [
             'starttime' => 'starttime',
             'endtime' => 'endtime',
         ],
-        'iconfile' => 'EXT:gb_events/Resources/Public/Icons/tx_gbevents_domain_model_event.gif',
+        'iconfile' => 'EXT:gb_events/Resources/Public/Icons/Extension.svg',
         'searchFields' => 'title,teaser,description,location',
     ],
     'types' => [
