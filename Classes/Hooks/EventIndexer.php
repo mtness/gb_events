@@ -1,9 +1,9 @@
 <?php
+
 namespace In2code\GbEvents\Hooks;
 
 use tx_kesearch_indexer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Utility\ArrayUtility;
 
 class EventIndexer
 {
@@ -111,7 +111,7 @@ class EventIndexer
             $event['location'],
         ];
 
-        return trim(join("\n", array_filter($content)));
+        return trim(implode("\n", array_filter($content)));
     }
 
     /**

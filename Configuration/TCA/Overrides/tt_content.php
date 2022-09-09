@@ -1,7 +1,7 @@
 <?php
 
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
-# Main Plugin (List and Details view, Export)
+// Main Plugin (List and Details view, Export)
 use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
 
 ExtensionUtility::registerPlugin(
@@ -16,7 +16,7 @@ ExtensionManagementUtility::addPiFlexFormValue(
 );
 $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_excludelist']['gbevents_main'] = 'layout,select_key,recursive';
 
-# Upcoming Plugin (List of upcoming events)
+// Upcoming Plugin (List of upcoming events)
 ExtensionUtility::registerPlugin(
     'GbEvents',
     'Upcoming',

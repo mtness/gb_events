@@ -1,9 +1,10 @@
 <?php
+
 namespace In2code\GbEvents\Controller;
 
-use Psr\Http\Message\ResponseInterface;
 use Exception;
 use In2code\GbEvents\Domain\Model\Event;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * ExportController
@@ -38,7 +39,7 @@ class ExportController extends BaseController
             $content[$event->getUniqueIdentifier()] = $event->iCalendarData();
         }
         $this->addCacheTags($events, 'tx_gbevents_domain_model_event');
-        $this->renderCalendar(join("\n", $content));
+        $this->renderCalendar(implode("\n", $content));
         return $this->htmlResponse();
     }
 
@@ -95,7 +96,7 @@ class ExportController extends BaseController
         if (trim($events) === '') {
             throw new Exception('No events to process', 1408611856);
         }
-        $content = join("\n", [
+        $content = implode("\n", [
             ExportController::VCALENDAR_START,
             $events,
             ExportController::VCALENDAR_END,

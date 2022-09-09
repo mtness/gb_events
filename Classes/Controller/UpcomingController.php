@@ -1,7 +1,9 @@
 <?php
+
 namespace In2code\GbEvents\Controller;
 
 use Psr\Http\Message\ResponseInterface;
+
 /**
  * UpcomingController
  */

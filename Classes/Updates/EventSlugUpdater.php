@@ -11,7 +11,6 @@ use TYPO3\CMS\Install\Updates\UpgradeWizardInterface;
 
 class EventSlugUpdater implements UpgradeWizardInterface
 {
-
     /**
      * @var SlugService
      */
@@ -78,7 +77,7 @@ class EventSlugUpdater implements UpgradeWizardInterface
     public function getPrerequisites(): array
     {
         return [
-            DatabaseUpdatedPrerequisite::class
+            DatabaseUpdatedPrerequisite::class,
         ];
     }
 }

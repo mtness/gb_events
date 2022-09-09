@@ -33,7 +33,7 @@ return [
             'endtime' => 'endtime',
         ],
         'iconfile' => 'EXT:gb_events/Resources/Public/Icons/tx_gbevents_domain_model_event.gif',
-        'searchFields' => 'title,teaser,description,location'
+        'searchFields' => 'title,teaser,description,location',
     ],
     'types' => [
         '1' => [
@@ -143,8 +143,8 @@ return [
                 ],
                 'fallbackCharacter' => '-',
                 'eval' => 'uniqueInSite',
-                'default' => ''
-            ]
+                'default' => '',
+            ],
         ],
         'teaser' => [
             'exclude' => 0,

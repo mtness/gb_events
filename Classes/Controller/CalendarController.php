@@ -1,9 +1,11 @@
 <?php
+
 namespace In2code\GbEvents\Controller;
 
-use Psr\Http\Message\ResponseInterface;
 use DateTime;
 use Exception;
+use Psr\Http\Message\ResponseInterface;
+
 /**
  * Controller for the calendar view
  */
@@ -26,29 +28,29 @@ class CalendarController extends BaseController
         }
 
         // Start für Kalenderanzeige bestimmen
-        $preDate = clone($startDate);
+        $preDate = clone $startDate;
         if ($startDate->format('N') !== 1) {
             $preDate->modify('last monday of previous month');
         }
 
         // Ende des Monats bestimmen
-        $stopDate = clone($startDate);
+        $stopDate = clone $startDate;
         $stopDate->modify('last day of this month');
         $stopDate->modify('+86399 seconds');
 
-        $postDate = clone($stopDate);
+        $postDate = clone $stopDate;
         if ($stopDate->format('N') !== 7) {
             $postDate->modify('next sunday');
         }
 
         // Navigational dates
-        $nextMonth = clone($startDate);
+        $nextMonth = clone $startDate;
         $nextMonth->modify('first day of next month');
-        $previousMonth = clone($startDate);
+        $previousMonth = clone $startDate;
         $previousMonth->modify('first day of previous month');
 
         $days = [];
-        $runDate = clone($preDate);
+        $runDate = clone $preDate;
         while ($runDate <= $postDate) {
             $days[$runDate->format('Y-m-d')] = [
                 'date' => clone($runDate),

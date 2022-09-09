@@ -3,12 +3,12 @@
 namespace In2code\GbEvents\Domain\Repository;
 
 use DateTime;
-use TYPO3\CMS\Extbase\Persistence\Generic\Query;
 use In2code\GbEvents\Domain\Model\Event;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\Qom\AndInterface;
 use TYPO3\CMS\Extbase\Persistence\Generic\Qom\ConstraintInterface;
 use TYPO3\CMS\Extbase\Persistence\Generic\Qom\OrInterface;
+use TYPO3\CMS\Extbase\Persistence\Generic\Query;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 use TYPO3\CMS\Extbase\Persistence\Repository;
@@ -59,7 +59,7 @@ class EventRepository extends Repository
         }
 
         $startDate = new DateTime('midnight');
-        $stopDate = new DateTime(sprintf('midnight + %d years', intval($years)));
+        $stopDate = new DateTime(sprintf('midnight + %d years', (int)$years));
 
         $query = $this->queryAllBetween($startDate, $stopDate, $showStartedEvents, $categories);
 
@@ -225,7 +225,7 @@ class EventRepository extends Repository
                             continue;
                         }
                     }
-                    $recurringEvent = clone($event);
+                    $recurringEvent = clone $event;
                     $recurringEvent->setEventDate($eventDate);
 
                     if ($grouped) {
@@ -249,7 +249,7 @@ class EventRepository extends Repository
                             continue;
                         }
                     }
-                    $recurringEvent = clone($event);
+                    $recurringEvent = clone $event;
                     $recurringEvent->setEventDate($eventDate);
 
                     if ($grouped) {

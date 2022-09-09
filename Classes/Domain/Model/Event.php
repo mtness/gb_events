@@ -2,16 +2,16 @@
 
 namespace In2code\GbEvents\Domain\Model;
 
-use TYPO3\CMS\Extbase\Annotation\Validate;
-use DateTime;
-use TYPO3\CMS\Extbase\Domain\Model\Category;
-use TYPO3\CMS\Extbase\Annotation\ORM\Lazy;
-use Exception;
 use DateInterval;
+use DateTime;
 use DateTimeZone;
+use Exception;
 use TYPO3\CMS\Core\Resource\FileReference;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Annotation\ORM\Lazy;
+use TYPO3\CMS\Extbase\Annotation\Validate;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
+use TYPO3\CMS\Extbase\Domain\Model\Category;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
@@ -208,7 +208,7 @@ class Event extends AbstractEntity implements EventInterface
         $this->excludedDates = [];
 
         // Global excludes
-        if (intval($this->settings['forceExcludeHolidays']) !== 0
+        if ((int)($this->settings['forceExcludeHolidays']) !== 0
             || $this->getRecurringExcludeHolidays() === true
         ) {
             if (is_array($this->settings['holidays'])
@@ -351,14 +351,14 @@ class Event extends AbstractEntity implements EventInterface
         $oneDay = new DateInterval('P1D');
         $oneMonth = new DateInterval('P1M');
 
-        $startMonth = clone($startDate);
+        $startMonth = clone $startDate;
         $startMonth->modify('first day of this month');
-        $stopMonth = clone($stopDate);
+        $stopMonth = clone $stopDate;
         $stopMonth->modify('last day of this month');
         $recurringMonths = [];
 
         while ($startMonth <= $stopMonth) {
-            $recurringMonths[] = clone($startMonth);
+            $recurringMonths[] = clone $startMonth;
             $startMonth->add($oneMonth);
         }
 
@@ -383,14 +383,14 @@ class Event extends AbstractEntity implements EventInterface
                             if ($this->isExcludedDate($workDate)) {
                                 continue;
                             }
-                            $eventDates[$workDate->format('Y-m-d')] = clone($workDate);
+                            $eventDates[$workDate->format('Y-m-d')] = clone $workDate;
                             if (!$this->settings['startDateOnly'] || $expandedList) {
-                                $re_StartDate = clone($workDate);
+                                $re_StartDate = clone $workDate;
                                 $difference = $this->getEventDate()->diff($re_StartDate);
-                                $re_StopDate = clone($this->getEventStopDate());
+                                $re_StopDate = clone $this->getEventStopDate();
                                 $re_StopDate->add($difference);
                                 while ($re_StartDate <= $re_StopDate) {
-                                    $eventDates[$re_StartDate->format('Y-m-d')] = clone($re_StartDate);
+                                    $eventDates[$re_StartDate->format('Y-m-d')] = clone $re_StartDate;
                                     $re_StartDate->modify('+1 day');
                                 }
                             }
@@ -399,7 +399,7 @@ class Event extends AbstractEntity implements EventInterface
                 }
             } else {
                 // Check the weekdays only, ignoring the weeks of the month
-                $stopDay = clone($workDate);
+                $stopDay = clone $workDate;
                 $stopDay->modify('last day of this month');
                 while ($workDate <= $stopDay) {
                     $addCurrentDay = false;
@@ -433,14 +433,14 @@ class Event extends AbstractEntity implements EventInterface
                             && $workDate >= $startDate
                             && $workDate <= $stopDate
                         ) {
-                            $eventDates[$workDate->format('Y-m-d')] = clone($workDate);
+                            $eventDates[$workDate->format('Y-m-d')] = clone $workDate;
                             if (!$this->settings['startDateOnly'] || $expandedList) {
-                                $re_StartDate = clone($workDate);
+                                $re_StartDate = clone $workDate;
                                 $difference = $this->getEventDate()->diff($re_StartDate);
-                                $re_StopDate = clone($this->getEventStopDate());
+                                $re_StopDate = clone $this->getEventStopDate();
                                 $re_StopDate->add($difference);
                                 while ($re_StartDate <= $re_StopDate) {
-                                    $eventDates[$re_StartDate->format('Y-m-d')] = clone($re_StartDate);
+                                    $eventDates[$re_StartDate->format('Y-m-d')] = clone $re_StartDate;
                                     $re_StartDate->modify('+1 day');
                                 }
                             }
@@ -450,17 +450,17 @@ class Event extends AbstractEntity implements EventInterface
                 }
             }
         }
-        $myStartDate = clone($this->getEventDate());
-        $myStopDate = clone($this->getEventStopDate());
+        $myStartDate = clone $this->getEventDate();
+        $myStopDate = clone $this->getEventStopDate();
         if (!$this->settings['startDateOnly'] || $expandedList) {
             while ($myStartDate <= $myStopDate) {
                 if (!$this->isExcludedDate($myStartDate)) {
-                    $eventDates[$myStartDate->format('Y-m-d')] = clone($myStartDate);
+                    $eventDates[$myStartDate->format('Y-m-d')] = clone $myStartDate;
                 }
                 $myStartDate->modify('+1 day');
             }
         } else {
-            $eventDates[$myStartDate->format('Y-m-d')] = clone($myStartDate);
+            $eventDates[$myStartDate->format('Y-m-d')] = clone $myStartDate;
         }
 
         $eventDates[$this->getEventDate()->format('Y-m-d')] = $this->getEventDate();
@@ -665,9 +665,9 @@ class Event extends AbstractEntity implements EventInterface
     public function iCalendarData()
     {
         $now = new DateTime('now', new DateTimeZone('UTC'));
-        $startDate = clone($this->getEventDate());
+        $startDate = clone $this->getEventDate();
         $startDate->setTimezone(new DateTimeZone('UTC'));
-        $stopDate = clone($this->getEventStopDate());
+        $stopDate = clone $this->getEventStopDate();
         $stopDate->setTimezone(new DateTimeZone('UTC'));
 
         $iCalData = [];
@@ -838,14 +838,14 @@ class Event extends AbstractEntity implements EventInterface
                     $byDays[] = sprintf('%s%s', $week, $day);
                 }
             }
-            $rRule .= join(',', $byDays);
+            $rRule .= implode(',', $byDays);
         } else {
             $rRule = 'FREQ=WEEKLY;BYDAY=';
             $byDays = [];
             foreach ($days as $day) {
                 $byDays[] = $day;
             }
-            $rRule .= join(',', $byDays);
+            $rRule .= implode(',', $byDays);
         }
 
         return $rRule;

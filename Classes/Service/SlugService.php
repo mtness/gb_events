@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace In2code\GbEvents\Service;
 
-use PDO;
 use In2code\GbEvents\Utility\DatabaseUtility;
+use PDO;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\DataHandling\SlugHelper;

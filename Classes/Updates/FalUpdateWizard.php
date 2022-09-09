@@ -1,13 +1,14 @@
 <?php
+
 namespace In2code\GbEvents\Updates;
 
-use TYPO3\CMS\Core\Resource\ResourceFactory;
-use TYPO3\CMS\Core\Resource\FileRepository;
-use TYPO3\CMS\Core\Resource\ResourceStorage;
 use RuntimeException;
-use TYPO3\CMS\Core\Resource\StorageRepository;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Resource\File;
+use TYPO3\CMS\Core\Resource\FileRepository;
+use TYPO3\CMS\Core\Resource\ResourceFactory;
+use TYPO3\CMS\Core\Resource\ResourceStorage;
+use TYPO3\CMS\Core\Resource\StorageRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Install\Updates\AbstractUpdate;
 

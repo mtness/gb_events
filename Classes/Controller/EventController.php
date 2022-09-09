@@ -1,10 +1,10 @@
 <?php
+
 namespace In2code\GbEvents\Controller;
 
+use In2code\GbEvents\Domain\Model\Event;
 use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Extbase\Http\ForwardResponse;
-use In2code\GbEvents\Domain\Model\Event;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Controller for the Event object
@@ -13,8 +13,6 @@ class EventController extends BaseController
 {
     /**
      * Displays all Events
-     *
-     *
      */
     public function listAction(): ResponseInterface
     {

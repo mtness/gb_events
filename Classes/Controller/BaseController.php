@@ -1,11 +1,12 @@
 <?php
+
 namespace In2code\GbEvents\Controller;
 
-use TYPO3\CMS\Core\Http\ApplicationType;
-use Traversable;
 use ArrayAccess;
 use In2code\GbEvents\Domain\Repository\EventRepository;
 use Psr\Http\Message\ResponseInterface;
+use Traversable;
+use TYPO3\CMS\Core\Http\ApplicationType;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
