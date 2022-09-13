@@ -68,7 +68,7 @@ abstract class BaseController extends ActionController
                 $table = $this->getDataMapper()->convertClassNameToTableName(get_class($item));
                 $uid = $item->getUid();
                 $tags[] = sprintf('%s_%s', $table, $uid);
-            } elseif ((string)$item !== '') {
+            } elseif (is_string($item) && (string)$item !== '') {
                 $tags[] = (string)$item;
             }
         }
