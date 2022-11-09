@@ -1,7 +1,19 @@
+# TYPO3 Extension gb_events
+
+Initially created from gute-botschafter.de
+In2code took over the extension to commit future updates and TYPO3 compatability releases.
+
+This extension is a calendar plugin with iCal export
+
+Example output in frontend:
+
+![Example calender view](Documentation/Images/screenshot_frontend.png "Example calender view")
+
 ## Changelog
 
 | Version | Date       | State         | Description                                                                                                                                            |
 |---------|------------| ------------- |--------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 10.1.0  | 2022-11-09 | FEATURE       | Allow export controller also in plugin "Upcoming", fix some missing TCA labels                                                                         |
 | 10.0.2  | 2022-10-10 | BUGFIX        | Fix "array to string" exception in PHP 8                                                                                                               |
 | 10.0.1  | 2022-10-10 | BUGFIX        | Fix typo for TER releases                                                                                                                              |
 | 10.0.0  | 2022-10-10 | FEATURE       | TYPO3 11 update                                                                                                                                        |
