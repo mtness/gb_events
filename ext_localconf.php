@@ -21,7 +21,10 @@ call_user_func(
                 ArchiveController::class => 'list',
                 CalendarController::class => 'show',
                 ExportController::class => 'list, show',
-            ]
+            ],
+            [
+                ExportController::class => 'list, show',
+            ],
         );
 
         ExtensionUtility::configurePlugin(
@@ -29,7 +32,11 @@ call_user_func(
             'Upcoming',
             [
                 UpcomingController::class => 'list',
-            ]
+                ExportController::class => 'list, show',
+            ],
+            [
+                ExportController::class => 'list, show',
+            ],
         );
 
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/install']['update']['eventSlug'] = EventSlugUpdater::class;
