@@ -11,6 +11,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Mvc\RequestInterface;
+use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use TYPO3\CMS\Extbase\Persistence\Generic\Mapper\DataMapper;
 use TYPO3\CMS\Extbase\Property\Exception as ExceptionExtbaseProperty;
 use TYPO3\CMS\Extbase\Property\Exception\TargetNotFoundException;
@@ -41,6 +42,18 @@ abstract class BaseController extends ActionController
     public function injectEventRepository(EventRepository $eventRepository)
     {
         $this->eventRepository = $eventRepository;
+    }
+
+    /**
+     * @param ViewInterface $view
+     * @return void
+     */
+    public function initializeView(ViewInterface $view)
+    {
+        parent::initializeView($view);
+        $this->view->assignMultiple([
+            'data' => $this->configurationManager->getContentObject()->data,
+        ]);
     }
 
     /**
