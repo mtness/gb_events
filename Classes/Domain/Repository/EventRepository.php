@@ -4,6 +4,7 @@ namespace In2code\GbEvents\Domain\Repository;
 
 use DateTime;
 use In2code\GbEvents\Domain\Model\Event;
+use Throwable;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\Qom\AndInterface;
 use TYPO3\CMS\Extbase\Persistence\Generic\Qom\ConstraintInterface;
@@ -45,14 +46,15 @@ class EventRepository extends Repository
     }
 
     /**
-     * Find all events (limited to a amount of years)
+     * Find all events (limited to an amount of years)
+     * Filter can also be set to one day with &tx_gbevents_main[filter][day]=2022-11-30
      *
      * @param int $years
      * @param bool $showStartedEvents
      * @param string $categories
      * @return array
      */
-    public function findAll($years = 1, $showStartedEvents = false, $categories = null)
+    public function findAll($years = 1, $showStartedEvents = false, $categories = null, array $filter = [])
     {
         if ((int)$years === 0) {
             $years = 1;
@@ -60,6 +62,16 @@ class EventRepository extends Repository
 
         $startDate = new DateTime('midnight');
         $stopDate = new DateTime(sprintf('midnight + %d years', (int)$years));
+
+        if (isset($filter['day'])) {
+            try {
+                $startDate = new DateTime($filter['day']);
+                $stopDate = clone $startDate;
+                $stopDate->modify('+1 day')->modify('-1 second');
+            } catch (Throwable $exception) {
+                // Don't manipulate dates
+            }
+        }
 
         $query = $this->queryAllBetween($startDate, $stopDate, $showStartedEvents, $categories);
 
