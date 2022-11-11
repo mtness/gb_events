@@ -14,7 +14,7 @@ ExtensionManagementUtility::addPiFlexFormValue(
     'gbevents_main',
     'FILE:EXT:gb_events/Configuration/FlexForms/Main.xml'
 );
-$GLOBALS['TCA']['tt_content']['types']['list']['subtypes_excludelist']['gbevents_main'] = 'layout,select_key,recursive';
+$GLOBALS['TCA']['tt_content']['types']['list']['subtypes_excludelist']['gbevents_main'] = 'select_key,recursive';
 
 // Upcoming Plugin (List of upcoming events)
 ExtensionUtility::registerPlugin(
@@ -27,4 +27,4 @@ ExtensionManagementUtility::addPiFlexFormValue(
     'gbevents_upcoming',
     'FILE:EXT:gb_events/Configuration/FlexForms/Upcoming.xml'
 );
-$GLOBALS['TCA']['tt_content']['types']['list']['subtypes_excludelist']['gbevents_upcoming'] = 'layout,select_key,recursive';
+$GLOBALS['TCA']['tt_content']['types']['list']['subtypes_excludelist']['gbevents_upcoming'] = 'select_key,recursive';
