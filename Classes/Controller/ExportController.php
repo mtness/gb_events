@@ -29,9 +29,9 @@ class ExportController extends BaseController
     public function listAction(): ResponseInterface
     {
         $events = $this->eventRepository->findAll(
-            $this->settings['years'],
-            (bool)$this->settings['showStartedEvents'],
-            $this->settings['categories']
+            $this->settings['years'] ?? 1,
+            (bool)($this->settings['showStartedEvents'] ?? true),
+            $this->settings['categories'] ?? ''
         );
         $content = [];
         foreach ($events as $event) {
@@ -39,7 +39,7 @@ class ExportController extends BaseController
             $content[$event->getUniqueIdentifier()] = $event->iCalendarData();
         }
         $this->addCacheTags($events, 'tx_gbevents_domain_model_event');
-        $this->renderCalendar(implode("\n", $content));
+        $this->renderCalendar(implode(PHP_EOL, $content));
         return $this->htmlResponse();
     }
 

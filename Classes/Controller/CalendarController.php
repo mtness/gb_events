@@ -64,7 +64,7 @@ class CalendarController extends BaseController
             $preDate,
             $postDate,
             false,
-            $this->settings['categories']
+            $this->settings['categories'] ?? ''
         );
 
         foreach ($events as $eventDay => $eventsThisDay) {

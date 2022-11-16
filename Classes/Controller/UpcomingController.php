@@ -17,9 +17,9 @@ class UpcomingController extends BaseController
     public function listAction(): ResponseInterface
     {
         $events = $this->eventRepository->findUpcoming(
-            $this->settings['limit'],
-            (bool)$this->settings['showStartedEvents'],
-            $this->settings['categories']
+            $this->settings['limit'] ?? 100,
+            (bool)($this->settings['showStartedEvents'] ?? true),
+            $this->settings['categories'] ?? ''
         );
         $this->addCacheTags($events, 'tx_gbevents_domain_model_event');
         $this->view->assign('events', $events);
