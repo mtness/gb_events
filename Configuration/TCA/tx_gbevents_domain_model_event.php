@@ -34,6 +34,7 @@ return [
         ],
         'iconfile' => 'EXT:gb_events/Resources/Public/Icons/Extension.svg',
         'searchFields' => 'title,teaser,description,location',
+        'default_sortby' => 'event_date DESC',
     ],
     'types' => [
         '1' => [
