@@ -164,7 +164,7 @@ return [
                 'type' => 'text',
                 'cols' => 40,
                 'rows' => 15,
-                'eval' => 'trim,required',
+                'eval' => 'trim',
                 'enableRichtext' => true,
             ],
         ],
