@@ -65,7 +65,6 @@ class Event extends AbstractEntity implements EventInterface
      * A detailed description of the event
      *
      * @var string
-     * @Validate("NotEmpty")
      */
     protected $description;
 
