@@ -107,6 +107,8 @@ class EventRepository extends Repository
         $conditions = $query->greaterThanOrEqual('event_date', $startDate);
         $this->applyRecurringConditions($query, $conditions, $startDate, $stopDate, $categories);
 
+        $query = $this->queryAllBetween($startDate, $stopDate, $showStartedEvents, $categories);
+
         return $this->resolveRecurringEvents(
             $query->execute(),
             $grouped = false,
