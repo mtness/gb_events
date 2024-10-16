@@ -8,11 +8,11 @@ $EM_CONF[$_EXTKEY] = [
     'author_email' => 'sebastian.stein@in2code.de',
     'author_company' => 'In2code GmbH',
     'state' => 'stable',
-    'version' => '11.0.1',
+    'version' => '11.1.1',
     'constraints' => [
         'depends' => [
             'php' => '7.4.0-8.9.99',
-            'typo3' => '11.5.0-11.5.99',
+            'typo3' => '11.5.0-13.4.99',
         ],
     ],
     'autoload' => [
