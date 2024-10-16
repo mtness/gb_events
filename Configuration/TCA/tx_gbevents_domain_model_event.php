@@ -8,13 +8,6 @@ if (!defined('TYPO3')) {
 
 $ll = 'LLL:EXT:gb_events/Resources/Private/Language/locallang_db.xlf:';
 
-ExtensionManagementUtility::makeCategorizable(
-    'gb_events',
-    'tx_gbevents_domain_model_event',
-    'categories',
-    []
-);
-
 return [
     'ctrl' => [
         'title' => 'LLL:EXT:gb_events/Resources/Private/Language/locallang_db.xlf:tx_gbevents_domain_model_event',
@@ -118,6 +111,12 @@ return [
                 'behaviour' => [
                     'allowLanguageSynchronization' => true,
                 ],
+            ],
+        ],
+        'categories' => [
+            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.category',
+            'config' => [
+                'type' => 'category',
             ],
         ],
         'title' => [
