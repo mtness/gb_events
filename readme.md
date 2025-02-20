@@ -14,7 +14,7 @@ Example output in frontend:
 
 | Version | Date       | State        | Description                                                                                                                                            |
 |---------|------------|--------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
-| 12.0.4  | 2025-02-16 | [!!!]FEATURE | TYPO3 v12+ full compatibility                                                                                                                          |
+| 12.0.6  | 2025-02-16 | [!!!]FEATURE | TYPO3 v12+ full compatibility                                                                                                                          |
 | 12.0.0  | 2025-02-16 | FEATURE      | TYPO3 v12+ update                                                                                                                                      |
 | 11.0.1  | 2022-11-16 | BUGFIX       | Fix missing array keys exceptions in PHP 8                                                                                                             |
 | 11.0.0  | 2022-11-11 | FEATURE      | Pass tt_content.* via {data} to all views, allow tt_content.layout, respect filter variables for one day                                               |
