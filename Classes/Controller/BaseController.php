@@ -44,11 +44,7 @@ abstract class BaseController extends ActionController
         $this->eventRepository = $eventRepository;
     }
 
-    /**
-     * @param ViewInterface $view
-     * @return void
-     */
-    public function initializeView(ViewInterface $view)
+    public function initializeView($view)
     {
         parent::initializeView($view);
         $this->view->assignMultiple([
