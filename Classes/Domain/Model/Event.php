@@ -13,25 +13,12 @@ use TYPO3\CMS\Extbase\Annotation\Validate;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Domain\Model\Category;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
-use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
-
 /**
  * A single event
  */
 class Event extends AbstractEntity implements EventInterface
 {
-    /**
-     * @var ConfigurationManagerInterface ;
-     */
-    protected $configurationManager;
-
-    /**
-     * @var ObjectManagerInterface ;
-     */
-    protected $objectManager;
-
     /**
      * Extension settings
      *
@@ -150,45 +137,16 @@ class Event extends AbstractEntity implements EventInterface
      * @var ObjectStorage<Category>
      * @Lazy
      */
-    protected $categories;
 
-    /**
-     * inject the objectManager
-     *
-     * @param ObjectManagerInterface $objectManager $objectManager
-     */
-    public function injectObjectManager(ObjectManagerInterface $objectManager)
-    {
-        $this->objectManager = $objectManager;
-    }
+    /** @var ObjectStorage<Category> */
+    #[Lazy]
+    protected ObjectStorage $categories;
 
-    /**
-     * inject the configurationManager
-     *
-     * @param \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface configurationManager configurationManager
-     * @return void
-     */
-    public function injectConfigurationManager(ConfigurationManagerInterface $configurationManager)
+    public function __construct()
     {
-        $this->configurationManager = $configurationManager;
-    }
-
-    /**
-     * Tasks to perform on object initialization
-     *
-     * @return void
-     */
-    public function initializeObject()
-    {
-        if ($this->objectManager === null) {
-            $this->objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        }
-        if ($this->configurationManager === null) {
-            $this->configurationManager = $this->objectManager->get(ConfigurationManagerInterface::class);
-        }
-        $this->images = $this->objectManager->get(ObjectStorage::class);
-        $this->downloads = $this->objectManager->get(ObjectStorage::class);
-        $this->categories = $this->objectManager->get(ObjectStorage::class);
+        $this->images = new ObjectStorage();
+        $this->downloads = new ObjectStorage();
+        $this->categories = new ObjectStorage();
         $this->settings = $this->configurationManager->getConfiguration(
             ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS
         );
@@ -451,7 +409,7 @@ class Event extends AbstractEntity implements EventInterface
         }
         $myStartDate = clone $this->getEventDate();
         $myStopDate = clone $this->getEventStopDate();
-        if (!$this->settings['startDateOnly'] || $expandedList) {
+        if (!isset($this->settings['startDateOnly']) || $expandedList) {
             while ($myStartDate <= $myStopDate) {
                 if (!$this->isExcludedDate($myStartDate)) {
                     $eventDates[$myStartDate->format('Y-m-d')] = clone $myStartDate;

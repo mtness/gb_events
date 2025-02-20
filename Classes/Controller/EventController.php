@@ -19,7 +19,7 @@ class EventController extends BaseController
                 $events = $this->eventRepository->findAll(
                     $this->settings['years'] ?? 1,
                     (bool)($this->settings['showStartedEvents'] ?? true),
-                    $this->settings['categories'] ?? '',
+                    $this->settings['categories'] ?? null,
                     $filter
                 );
                 $this->addCacheTags($events, 'tx_gbevents_domain_model_event');

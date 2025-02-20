@@ -159,12 +159,6 @@ class EventRepository extends Repository
 
     /**
      * Add conditions to retrieve recurring dates from the database
-     *
-     * @param QueryInterface|Query $query
-     * @param ConstraintInterface $conditions
-     * @param DateTime $startDate
-     * @param DateTime $stopDate
-     * @param string $categories
      */
     protected function applyRecurringConditions(
         QueryInterface &$query,
@@ -173,7 +167,25 @@ class EventRepository extends Repository
         DateTime $stopDate,
         $categories = null
     ) {
-        $conditions = $query->logicalOr([$conditions, $query->logicalAnd([$query->lessThanOrEqual('event_date', $stopDate), $query->logicalOr([$query->greaterThan('recurringDays', 0), $query->greaterThan('recurringWeeks', 0)]), $query->logicalOr([$query->equals('recurringStop', 0), $query->greaterThanOrEqual('recurringStop', $startDate)])])]);
+        $conditions = $query->logicalOr(
+                        ...array_values([
+                            $conditions,
+                            $query->logicalAnd(
+                                ...array_values([
+                                    $query->lessThanOrEqual('event_date', $stopDate),
+                                    $query->logicalOr(
+                                                ...array_values([
+                                                    $query->greaterThan('recurringDays', 0),
+                                                    $query->greaterThan('recurringWeeks', 0)
+                                                ])),
+                                    $query->logicalOr(
+                                                ...array_values([
+                                                    $query->equals('recurringStop', 0),
+                                                    $query->greaterThanOrEqual('recurringStop', $startDate)
+                                                ]))
+                                ]))
+                        ])
+                      );
         $this->applyCategoryFilters($query, $conditions, $categories);
         $query->matching($conditions);
     }
@@ -294,7 +306,7 @@ class EventRepository extends Repository
      * @param DateTime $currentDate
      * @return bool
      */
-    protected function isVisibleEvent(DateTime $eventDate, $duration = 0, DateTime $currentDate = null)
+    protected function isVisibleEvent(DateTime $eventDate, $duration = 0, ?DateTime $currentDate = null): bool
     {
         if (is_null($currentDate)) {
             $currentDate = new DateTime('midnight');
@@ -336,9 +348,23 @@ class EventRepository extends Repository
         DateTime $stopDate,
         $showStartedEvents = false
     ) {
-        $conditions = $query->logicalAnd([$query->greaterThanOrEqual('event_date', $startDate), $query->lessThanOrEqual('event_date', $stopDate)]);
+        $conditions = $query->logicalAnd(
+            ...array_values(
+                [$query->greaterThanOrEqual('event_date', $startDate), $query->lessThanOrEqual('event_date', $stopDate)]
+            )
+        );
         if ($showStartedEvents == true) {
-            $conditions = $query->logicalOr([$conditions, $query->logicalAnd([$query->lessThanOrEqual('event_date', $startDate), $query->greaterThanOrEqual('event_stop_date', $startDate)])]);
+            $conditions = $query->logicalOr(
+                            ...array_values([
+                                        $conditions,
+                                        $query->logicalAnd(
+                                            ...array_values([
+                                                $query->lessThanOrEqual('event_date', $startDate),
+                                                $query->greaterThanOrEqual('event_stop_date', $startDate)
+                                            ])
+                                        )
+                                    ])
+                          );
         }
 
         return $conditions;

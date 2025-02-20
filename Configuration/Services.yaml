@@ -6,3 +6,4 @@ services:
 
   In2code\GbEvents\:
     resource: '../Classes/*'
+    exclude: '../Classes/Domain/Model/*'

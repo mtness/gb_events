@@ -46,9 +46,8 @@ abstract class BaseController extends ActionController
 
     public function initializeView($view)
     {
-        parent::initializeView($view);
         $this->view->assignMultiple([
-            'data' => $this->configurationManager->getContentObject()->data,
+            'data' => $this->request->getAttribute('currentContentObject')
         ]);
     }
 
@@ -74,7 +73,7 @@ abstract class BaseController extends ActionController
         $tags = $additionalTags;
         foreach ($items as $item) {
             if ($item instanceof AbstractEntity) {
-                $table = $this->getDataMapper()->convertClassNameToTableName(get_class($item));
+                $table = $this->dataMapper->convertClassNameToTableName(get_class($item));
                 $uid = $item->getUid();
                 $tags[] = sprintf('%s_%s', $table, $uid);
             } elseif (is_string($item) && (string)$item !== '') {
@@ -109,18 +108,10 @@ abstract class BaseController extends ActionController
         return $response;
     }
 
-    /**
-     * @return DataMapper
-     */
-    protected function getDataMapper()
+    public function injectDataMapper(DataMapper $dataMapper): void
     {
-        if (!isset($this->dataMapper)) {
-            $this->dataMapper = $this->objectManager->get(DataMapper::class);
-        }
-
-        return $this->dataMapper;
+        $this->dataMapper = $dataMapper;
     }
-
     /**
      * @return TypoScriptFrontendController
      */
