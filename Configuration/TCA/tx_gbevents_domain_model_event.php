@@ -309,12 +309,18 @@ return [
         'images' => [
             'exclude' => 0,
             'label' => 'LLL:EXT:gb_events/Resources/Private/Language/locallang_db.xlf:tx_gbevents_domain_model_event.images',
-            'config' => ExtensionManagementUtility::getFileFieldTCAConfig('images'),
+            'config' => [
+                'type' => 'file',
+                'allowed' => 'common-image-types'
+            ],
         ],
         'downloads' => [
             'exclude' => 0,
             'label' => 'LLL:EXT:gb_events/Resources/Private/Language/locallang_db.xlf:tx_gbevents_domain_model_event.downloads',
-            'config' => ExtensionManagementUtility::getFileFieldTCAConfig('downloads'),
+            'config' => [
+                'type' => 'file',
+                'allowed' => 'common-file-types'
+            ],
         ],
     ],
 ];
