@@ -77,8 +77,17 @@ class GroupedForDateTimeViewHelper extends AbstractViewHelper {
      * @author Thomas Allmer <at@delusionworld.com>
      * @api
      */
-    public function render($each, $as, $groupBy, $groupKey = 'groupKey', $format = '', $dateTimeKey = 'dateTimeKey') {
+    public function render(): ?string {
+
+        $each        = $this->arguments['each'];
+        $as          = $this->arguments['as'];
+        $groupBy     = $this->arguments['groupBy'];
+        $groupKey    = $this->arguments['groupkey'] ?? 'groupKey';
+        $format      = $this->arguments['format'];
+        $dateTimeKey = $this->arguments['dateTimeKey'] ?? 'dateTimeKey';
+
         $output = '';
+
         if ($each === NULL) {
             return '';
         }
@@ -114,7 +123,7 @@ class GroupedForDateTimeViewHelper extends AbstractViewHelper {
      * @return array The grouped array in the form array('keys' => array('key1' => [key1value], 'key2' => [key2value], ...), 'values' => array('key1' => array([key1value] => [element1]), ...), ...)
      * @author Bastian Waidelich <bastian@typo3.org>
      */
-    protected function groupElements(array $elements, $groupBy, $format) {
+    protected function groupElements(array $elements, string $groupBy, string $format): array {
         $groups = array('keys' => array(), 'values' => array());
         foreach ($elements as $key => $value) {
 

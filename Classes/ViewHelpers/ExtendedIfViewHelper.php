@@ -32,7 +32,11 @@ class ExtendedIfViewHelper extends AbstractConditionViewHelper {
      * @param boolean $or View helper condition
      * @return string the rendered string
      */
-    public function render($condition, $or) {
+    public function render(): ?string {
+
+        $condition = $this->arguments['condition'];
+        $or        = $this->arguments['or'];
+
         if ($condition || $or) {
             return $this->renderThenChild();
         } else {
