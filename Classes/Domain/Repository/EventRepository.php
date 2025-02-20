@@ -320,7 +320,7 @@ class EventRepository extends Repository
      * @param DateTime|null $currentDate
      * @return bool
      */
-    protected function isEventInPast(DateTime $eventStart, $duration = 0, DateTime $currentDate = null)
+    protected function isEventInPast(DateTime $eventStart, $duration = 0, ?DateTime $currentDate = null): bool
     {
         if (is_null($currentDate)) {
             $currentDate = new DateTime('midnight');
