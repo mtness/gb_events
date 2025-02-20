@@ -2,6 +2,7 @@
 
 Initially created from gute-botschafter.de
 In2code took over the extension to commit future updates and TYPO3 compatability releases.
+Markus Timtner provided the TYPO3 v12+ compatibility.
 
 This extension is a calendar plugin with iCal export
 
@@ -13,6 +14,7 @@ Example output in frontend:
 
 | Version | Date       | State         | Description                                                                                                                                            |
 |---------|------------| ------------- |--------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 12.0.0  | 2025-02-16 | FEATURE       | TYPO3 v12+ update                                                                                                                                      |
 | 11.0.1  | 2022-11-16 | BUGFIX        | Fix missing array keys exceptions in PHP 8                                                                                                             |
 | 11.0.0  | 2022-11-11 | FEATURE       | Pass tt_content.* via {data} to all views, allow tt_content.layout, respect filter variables for one day                                               |
 | 10.1.0  | 2022-11-09 | FEATURE       | Allow export controller also in plugin "Upcoming", fix some missing TCA labels                                                                         |
