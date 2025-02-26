@@ -62,6 +62,16 @@ class GroupedForDateTimeViewHelper extends AbstractViewHelper {
      */
     protected $escapeOutput = false;
 
+    public function initializeArguments()
+    {
+        parent::initializeArguments();
+        $this->registerArgument('each', 'array', '', false );
+        $this->registerArgument('as', 'string', '', false);
+        $this->registerArgument('groupBy', 'string', '', false);
+        $this->registerArgument('groupKey', 'string', '', false);
+        $this->registerArgument('format', 'string', '', false);
+        $this->registerArgument('dateTimeKey', 'string', '', false);
+    }
     /**
      * Iterates through elements of $each and renders child nodes
      *
@@ -136,14 +146,33 @@ class GroupedForDateTimeViewHelper extends AbstractViewHelper {
             }
 
             if (strpos($format, '%') !== FALSE) {
-                $formatedDatetime = strftime($format, $currentGroupIndex->format('U'));
+                $locale = 'de_DE'; // Replace with your desired locale
+                $formatter = new \IntlDateFormatter(
+                    $locale, // Locale
+                    \IntlDateFormatter::FULL, // Date type
+                    \IntlDateFormatter::FULL, // Time type
+                    null, // Timezone
+                    null, // Calendar
+                    $format // Pattern
+                );
+
+                $formatedDatetime = $formatter->format($currentGroupIndex->getTimestamp());
             } else {
                 $formatedDatetime = $currentGroupIndex->format($format);
             }
             $groups['dateTimeKeys'][$formatedDatetime] = $currentGroupIndex;
 
             if (strpos($format, '%') !== FALSE) {
-                $currentGroupIndex = strftime($format, $currentGroupIndex->format('U'));
+                $locale = 'de_DE'; // Replace with your desired locale
+                $formatter = new \IntlDateFormatter(
+                    $locale, // Locale
+                    \IntlDateFormatter::FULL, // Date type
+                    \IntlDateFormatter::FULL, // Time type
+                    null, // Timezone
+                    null, // Calendar
+                    $format // Pattern
+                );
+                $currentGroupIndex = $formatter->format($currentGroupIndex->getTimestamp());
             } else {
                 $currentGroupIndex = $currentGroupIndex->format($format);
             }
